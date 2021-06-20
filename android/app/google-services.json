@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "736745324407",
+    "project_id": "metro-ticket-ff4bb",
+    "storage_bucket": "metro-ticket-ff4bb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:736745324407:android:f922f6cce6472a80866b72",
+        "android_client_info": {
+          "package_name": "com.metro_reservation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "736745324407-9i6qekor6u65v4uuot3cbj5sud4q4tig.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApT8Nc30v3gnwSC2486TZkkjBR5o6qOs0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "736745324407-9i6qekor6u65v4uuot3cbj5sud4q4tig.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
