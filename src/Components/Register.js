@@ -8,7 +8,7 @@ import FirebaseUtilities from '../Utilities/firebaseAuth';
 import Validator from '../Utilities/inputValidation';
 import userOperation from './../Utilities/firebaseDatabase';
 
-const Register = () => {
+const Register = props => {
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -34,7 +34,9 @@ const Register = () => {
     FirebaseUtilities.signUp(emailValue, passwordValue)
       .then(() => {
         console.log('user Created', userName);
-        let id = FirebaseUtilities.getUserId();
+        let id = FirebaseUtilities.getUserId(() => {
+          props.navigation.navigate('imageUploader');
+        });
         console.log('id->', id);
         userOperation
           .createNewUser(id, name, emailValue, passwordValue, phone, gender)
@@ -48,6 +50,8 @@ const Register = () => {
       .catch(e => {
         console.log('Sign up', e);
       });
+    console.log(props);
+    //imageUploader
   };
   let validate = (value, type) => {
     if (type === 'userName') {
