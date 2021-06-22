@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "736745324407-29jml7kbvv2qq5h81qu6jatk74gs9ist.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.metro_reservation",
+            "certificate_hash": "ef2eb8e29c02e6ea45ba42c17813ed3fdf676df9"
+          }
+        },
+        {
           "client_id": "736745324407-9i6qekor6u65v4uuot3cbj5sud4q4tig.apps.googleusercontent.com",
           "client_type": 3
         }

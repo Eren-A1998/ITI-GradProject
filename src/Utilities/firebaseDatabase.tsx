@@ -14,7 +14,7 @@ export default class userOperation {
     this.usersCollection
       .doc(id)
       .set({userName, email, password, phoneNumber, gender})
-      .then(res => {
+      .then(() => {
         console.log('added to store', userName);
       })
       .catch(e => {

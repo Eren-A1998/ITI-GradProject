@@ -18,13 +18,14 @@ export default function UploadScreen() {
   const [uploading, setUploading] = useState(false); // to check that image uploaded to firebase or not
   const [transferred, setTransferred] = useState(0); // to keep tracking uploading progress
 
-  const selectImage = () => {
-    const options = {
+  let selectImage = () => {
+    let options = {
       maxWidth: 2000,
       maxHeight: 2000,
       storageOptions: {skipBackup: true, path: 'Images'},
     };
-    ImagePicker.showImagePicker(options, response => {
+    
+    ImagePicker.launchImageLibrary(options, response => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -38,7 +39,7 @@ export default function UploadScreen() {
       }
     });
   };
-  const uploadImage = async () => {
+  let uploadImage = async () => {
     const {uri} = image;
     const filename = uri.substring(uri.lastIndexOf('/') + 1);
     const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;

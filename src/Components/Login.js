@@ -1,28 +1,19 @@
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Input} from 'react-native-elements';
+import {Input, SocialIcon} from 'react-native-elements';
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
 import registerStyle from '../Styles/register';
-import FirebaseUtilities from '../Utilities/firebaseAuth';
-import Validator from '../Utilities/inputValidation';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {
+  signInUser,
+  facebookSignIn,
+  googleSignIn,
+} from '../Redux/actions/userActions';
 
-const Login = () => {
+const Login = props => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  let signIn = (emailValue, passwordValue) => {
-    if (
-      !Validator.requiredValidator(emailValue) &&
-      !Validator.requiredValidator(passwordValue)
-    ) {
-      console.log(Validator.requiredValidator(emailValue));
-      console.log(Validator.requiredValidator(passwordValue));
-      console.log('Pressed', emailValue, passwordValue);
-      FirebaseUtilities.signIn(emailValue, passwordValue);
-      console.log('Done');
-    } else {
-      console.log('Please Enter email and/or password');
-    }
-  };
 
   return (
     <ScrollView>
@@ -46,12 +37,42 @@ const Login = () => {
 
         <TouchableOpacity
           style={registerStyle.submitBtn}
-          onPress={() => signIn(email, password)}>
+          onPress={() => props.signInUser(email, password)}>
           <Text style={registerStyle.textBtn}>Sign In</Text>
+        </TouchableOpacity>
+
+        <SocialIcon
+          title="Sign In With Facebook"
+          button
+          type="facebook"
+          onPress={() => facebookSignIn()}
+        />
+        <SocialIcon
+          title="Sign In With Google"
+          button
+          type="google"
+          onPress={() => googleSignIn()}
+        />
+        <TouchableOpacity
+          onPress={() => {
+            props.navigation.navigate('Register');
+          }}>
+          <Text style={{marginHorizontal: 60, color: 'gray'}}>
+            Don't have an account yet?sign up now
+          </Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
   );
 };
 
-export default Login;
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({signInUser}, dispatch);
+  // return {
+  //   signInUserEmailAndPassword: () => dispatch({type: 'SIGN_IN'}),
+  //   facebookSignInUser: () => dispatch(facebookSignIn),
+  //   googleSignInUser: () => dispatch(googleSignIn),
+  // };
+};
+
+export default connect(null, mapDispatchToProps)(Login);

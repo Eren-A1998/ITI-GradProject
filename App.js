@@ -10,6 +10,8 @@ import {Provider} from 'react-redux';
 import {applyMiddleware, createStore} from 'redux';
 import RootReducer from './src/Redux/reducers/index';
 import UploadScreen from './src/Components/ImageUploader';
+import Login from './src/Components/Login';
+import Home from './src/Components/Home';
 
 const Stack = createStackNavigator();
 const createStoreWithMW = applyMiddleware(PromiseMW)(createStore);
@@ -23,6 +25,8 @@ const App = () => {
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="imageUploader" component={UploadScreen} />
           <Stack.Screen name="TabNav" component={TabNavigators} />
+          <Stack.Screen name="login" component={Login} />
+          <Stack.Screen name="home" component={Home} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
