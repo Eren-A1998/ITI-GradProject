@@ -20,7 +20,7 @@ const CarouselCards = () => {
           itemWidth={ITEM_WIDTH}
           inactiveSlideShift={0}
           useScrollView={true}
-          //onSnapToItem={(index) => setIndex({ index }) }
+          onSnapToItem={(index) => setIndex( index ) }
         />
         <Pagination
         dotsLength={data.length}
