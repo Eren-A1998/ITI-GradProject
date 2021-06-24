@@ -7,7 +7,9 @@ const UserReducer = (state = {}, action) => {
     case 'FACEBOOK_SIGN_IN':
       return {...state, currentUser: action.payload};
     case 'GOOGLE_SIGN_IN':
-        return {...state, currentUser: action.payload};  
+      return {...state, currentUser: action.payload};
+    case 'EDIT_PROFILE':
+      return {...state, currentUser: action.payload};
     default:
       return {...state, currentUser: action.payload};
   }

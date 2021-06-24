@@ -21,4 +21,11 @@ export default class userOperation {
         console.log('store error', e);
       });
   }
+  public static updateDataUser(id, userName, phoneNumber) {
+    const editedUser = this.usersCollection.doc(id).update({
+      userName: userName,
+      phoneNumber: phoneNumber,
+    });
+    return editedUser;
+  }
 }

@@ -22,7 +22,7 @@ const Register = props => {
         <View style={{marginTop: 20}}>
           <TouchableOpacity
             style={registerStyle.submitBtn}
-            onPress={() => props.navigation.navigate('login')}>
+            onPress={() => props.navigation.navigate('editProfile')}>
             <Text style={registerStyle.textBtn}>Sign In</Text>
           </TouchableOpacity>
           <Input
@@ -85,7 +85,6 @@ const Register = props => {
         <TouchableOpacity
           style={registerStyle.submitBtn}
           onPress={() =>
-            // props.register(userName, email, password, phoneNumber, gender)
             props.signUpNewUser(userName, email, password, phoneNumber, gender)
           }>
           <Text style={registerStyle.textBtn}>Sign Up</Text>

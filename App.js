@@ -12,6 +12,7 @@ import RootReducer from './src/Redux/reducers/index';
 import UploadScreen from './src/Components/ImageUploader';
 import Login from './src/Components/Login';
 import Home from './src/Components/Home';
+import EditProfile from './src/Components/EditProfile';
 
 const Stack = createStackNavigator();
 const createStoreWithMW = applyMiddleware(PromiseMW)(createStore);
@@ -27,6 +28,8 @@ const App = () => {
           <Stack.Screen name="TabNav" component={TabNavigators} />
           <Stack.Screen name="login" component={Login} />
           <Stack.Screen name="home" component={Home} />
+          <Stack.Screen name="editProfile" component={EditProfile} />
+          
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

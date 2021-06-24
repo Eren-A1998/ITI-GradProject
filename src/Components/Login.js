@@ -68,11 +68,6 @@ const Login = props => {
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({signInUser}, dispatch);
-  // return {
-  //   signInUserEmailAndPassword: () => dispatch({type: 'SIGN_IN'}),
-  //   facebookSignInUser: () => dispatch(facebookSignIn),
-  //   googleSignInUser: () => dispatch(googleSignIn),
-  // };
 };
 
 export default connect(null, mapDispatchToProps)(Login);
