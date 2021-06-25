@@ -2,6 +2,7 @@ import React from 'react';
 import Booking from '../Components/Booking';
 import Home from '../Components/Home';
 import { createStackNavigator } from '@react-navigation/stack';
+import BookingNavigators from './BookingNavigators';
 
 const Stack = createStackNavigator();
 const HomeNavigators = ()=>{
@@ -25,7 +26,7 @@ const HomeNavigators = ()=>{
             //   />
             // ),
         }}/>
-        <Stack.Screen name="Booking" component={Booking}/>
+        <Stack.Screen options={{headerShown:false}} name="Booking" component={BookingNavigators}/>
     </Stack.Navigator>
     );
 }

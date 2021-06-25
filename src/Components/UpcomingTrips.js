@@ -2,8 +2,13 @@ import React from 'react';
 import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Iconf from 'react-native-vector-icons/Entypo';
+import { connect, useSelector } from 'react-redux';
+import { bindActionCreators } from 'redux'
+import {getTripsUserUpcoming} from '../Redux/actions/tripActions'
+import { useEffect } from 'react';
 
-const DATA = [
+
+/*const DATA = [
   {
     From: 'Sadat',
     To: 'Helwan',
@@ -85,15 +90,21 @@ const DATA = [
     Status:"Completed",
     Code:"K075",
   },
-];
+];*/
 
-const UpcomingTrips = ()=> {
+const UpcomingTrips = (props)=> {
+  console.log(props)
+  const {upcomingTrips} = props;
+useEffect(()=>{
+    props.getTripsUserUpcoming(1);
+},[]);
+
   const RenderItem = ({ item }) => (
     <View style={styles.item}>
       <View style = {{flexDirection:'row'}}>
         <View>
-          <Text style = {styles.Date}> {item.Date} </Text>
-          <Text style = {styles.Time}> {item.Time} </Text>
+          <Text style = {styles.Date}> {item.to} </Text>
+          <Text style = {styles.Time}> {item.from} </Text>
         </View>
 
         <View style = {{marginLeft:10}}>
@@ -101,28 +112,32 @@ const UpcomingTrips = ()=> {
         </View>
 
         <View>
-          <Text style = {styles.From}> {item.From} </Text>
+          <Text style = {styles.From}> {item.toLine} </Text>
           <Text style = {styles.To}> {item.To} </Text>
         </View>
       </View>
 
       <View style={{flexDirection:'row', marginTop:15}}>
-        <Text style={styles.Code}> {item.Code}</Text> 
+        <Text style={styles.Code}> {item.fromLine}</Text> 
         <Icon name="cash" size={30} color="green"></Icon>
-        <Text style={styles.Price}> {item.Price} EGP </Text>
-        <Text style={styles.Status}> {item.Status}</Text> 
+        <Text style={styles.Price}> {item.to} EGP </Text>
+        <Text style={styles.Status}> {item.payStatus}</Text> 
       </View>
     </View>
   );
-  
+  if(upcomingTrips){
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={DATA}
+        data={upcomingTrips}
         renderItem={RenderItem}
-        keyExtractor={item => item.Code}/>
+        keyExtractor={item => item.date}/>
     </SafeAreaView>    
   );
+}else{
+  return(
+  <View><Text>No Data To Show</Text></View>);
+}
 };
 
 const styles = StyleSheet.create
@@ -193,4 +208,15 @@ const styles = StyleSheet.create
   },
 });
 
-export default UpcomingTrips;
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({getTripsUserUpcoming}, dispatch)
+}
+
+const mapStateToProps = (state) => {
+  console.log(state)
+  return {
+    upcomingTrips: state.tripReducer.upcomingtrips,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UpcomingTrips);

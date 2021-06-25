@@ -5,7 +5,7 @@ import SliderStyle from '../../Styles/SliderStyle'
 
 const SliderPage1 = (props)=> {
   useEffect(()=>{
-    console.log(props.nav)
+    // console.log(props.nav)
    fadeIn()
    startShake()
  
@@ -43,7 +43,7 @@ const SliderPage1 = (props)=> {
             style={SliderStyle.skipButton} 
             onPress={()=>{
               //alert("navigate to Registration")
-              console.log(props.nav)
+              // console.log(props.nav)
               props.nav.navigate('Register')
               
             }

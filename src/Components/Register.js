@@ -90,17 +90,17 @@ const Register = (props) => {
           style={registerStyle.submitBtn}
           onPress={() => {
             props.navigation.navigate("TabNav");
-            console.log(
-              "Pressed",
-              userName,
-              email,
-              phoneNumber,
-              password,
-              confirmPassword,
-              gender
-            );
+            // console.log(
+            //   "Pressed",
+            //   userName,
+            //   email,
+            //   phoneNumber,
+            //   password,
+            //   confirmPassword,
+            //   gender
+            // );
             props.getUser(20)
-            console.log(props.currentUser)
+            // console.log(props.currentUser)
           }}
         >
           <Text style={registerStyle.textBtn}>Sign Up</Text>
@@ -114,7 +114,7 @@ const mapDiapatchToProps =(dispatch)=>{
   return bindActionCreators({getUser}, dispatch)
 }
 let mapStateToProps = (state) => {
- // console.log("mapStateToProps", state)
+ //console.log("mapStateToProps", state)
   return { currentUser: state.UserReducer.currentUser }
 
 }

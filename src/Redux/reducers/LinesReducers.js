@@ -4,7 +4,7 @@ const LineReducer = (state={},action)=>
     {
         case 'GET_LINES':
             return {...state,Lines:action.payload}
-        default:return {...state,Lines:action.payload}
+        default:{return state}
     }
 
 }

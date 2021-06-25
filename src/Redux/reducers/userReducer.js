@@ -6,7 +6,7 @@ const UserReducer = (state={},action)=>
             return {...state,message:action.payload}
         case 'GET_User':
             return {...state,currentUser:action.payload}
-        default:return {...state,currentUser:action.payload}
+        default:{return state}
     }
 
 }
