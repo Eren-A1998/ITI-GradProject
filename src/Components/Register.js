@@ -1,12 +1,19 @@
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Input} from 'react-native-elements';
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+} from 'react-native';
 import {RadioButton} from 'react-native-paper';
 import registerStyle from '../Styles/register';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {signUpNewUser} from '../Redux/actions/userActions';
+import Validator from '../Utilities/inputValidation';
 
 const Register = props => {
   const [userName, setUserName] = useState('');
@@ -79,10 +86,29 @@ const Register = props => {
 
         <TouchableOpacity
           style={registerStyle.submitBtn}
-          onPress={() =>
-            {props.signUpNewUser(userName, email, password, phoneNumber, gender);
-            props.navigation.navigate('editProfile');}
-          }>
+          onPress={() => {
+            if (
+              Validator.formValidation(
+                userName,
+                email,
+                password,
+                confirmPassword,
+                phoneNumber,
+              )
+            ) {
+              props.signUpNewUser(
+                userName,
+                email,
+                password,
+                confirmPassword,
+                phoneNumber,
+                gender,
+              );
+              props.navigation.navigate('editProfile');
+            } else {
+              alert('Error');
+            }
+          }}>
           <Text style={registerStyle.textBtn}>Sign Up</Text>
         </TouchableOpacity>
       </View>
@@ -94,3 +120,9 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators({signUpNewUser}, dispatch);
 };
 export default connect(null, mapDispatchToProps)(Register);
+
+const errorStyle = StyleSheet.create({
+  errorInput: {
+    borderColor: 'red',
+  },
+});

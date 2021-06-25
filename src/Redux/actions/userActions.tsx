@@ -1,10 +1,11 @@
 import FirebaseUtilities from '../../Utilities/firebaseAuth';
 import userOperation from './../../Utilities/firebaseDatabase';
 import ImageUploderUtility from './../../Utilities/firebaseStorage';
-import {Image} from 'react-native';
+
 
 export function signUpNewUser(userName, email, password, phoneNumber, gender) {
   let payload = null;
+
   FirebaseUtilities.signUp(email, password)
     .then(() => {
       console.log('user Created', userName);
