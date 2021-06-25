@@ -121,8 +121,3 @@ const mapDispatchToProps = dispatch => {
 };
 export default connect(null, mapDispatchToProps)(Register);
 
-const errorStyle = StyleSheet.create({
-  errorInput: {
-    borderColor: 'red',
-  },
-});
