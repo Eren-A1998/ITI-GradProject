@@ -28,4 +28,17 @@ export default class userOperation {
     });
     return editedUser;
   }
+  public static updateProfilePhoto(id, image) {
+    this.usersCollection
+      .doc(id)
+      .update({
+        image: image.uri,
+      })
+      .then(() => {
+        console.log('image added', image);
+      })
+      .catch(e => {
+        console.log('image error', e);
+      });
+  }
 }

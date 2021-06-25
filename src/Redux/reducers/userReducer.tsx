@@ -10,6 +10,8 @@ const UserReducer = (state = {}, action) => {
       return {...state, currentUser: action.payload};
     case 'EDIT_PROFILE':
       return {...state, currentUser: action.payload};
+    case 'UPLOAD_IMAGE':
+      return {...state, currentUser: action.payload};
     default:
       return {...state, currentUser: action.payload};
   }

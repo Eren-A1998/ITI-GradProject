@@ -1,5 +1,7 @@
 import FirebaseUtilities from '../../Utilities/firebaseAuth';
 import userOperation from './../../Utilities/firebaseDatabase';
+import ImageUploderUtility from './../../Utilities/firebaseStorage';
+import {Image} from 'react-native';
 
 export function signUpNewUser(userName, email, password, phoneNumber, gender) {
   let payload = null;
@@ -90,6 +92,19 @@ export function editUserProfile(userName, phoneNumber) {
 
   return {
     type: 'EDIT_PROFILE',
+    payload,
+  };
+}
+
+export function uploadProfileImage(image) {
+  let payload = null;
+
+  payload = ImageUploderUtility.uploadImageToStorage(image);
+  let id = FirebaseUtilities.getUserId();
+  userOperation.updateProfilePhoto(id, image);
+
+  return {
+    type: 'UPLOAD_IMAGE',
     payload,
   };
 }

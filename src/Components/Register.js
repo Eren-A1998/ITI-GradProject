@@ -20,11 +20,6 @@ const Register = props => {
     <ScrollView>
       <View style={registerStyle.container}>
         <View style={{marginTop: 20}}>
-          <TouchableOpacity
-            style={registerStyle.submitBtn}
-            onPress={() => props.navigation.navigate('editProfile')}>
-            <Text style={registerStyle.textBtn}>Sign In</Text>
-          </TouchableOpacity>
           <Input
             placeholder="User Name"
             keyboardType="ascii-capable"
@@ -85,7 +80,8 @@ const Register = props => {
         <TouchableOpacity
           style={registerStyle.submitBtn}
           onPress={() =>
-            props.signUpNewUser(userName, email, password, phoneNumber, gender)
+            {props.signUpNewUser(userName, email, password, phoneNumber, gender);
+            props.navigation.navigate('editProfile');}
           }>
           <Text style={registerStyle.textBtn}>Sign Up</Text>
         </TouchableOpacity>
