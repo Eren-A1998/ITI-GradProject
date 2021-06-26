@@ -11,6 +11,9 @@ const tripReducer = (state={},action)=>
         case 'UPCOMING_TRIP':
             return {...state,upcomingtrips:action.payload}
 
+        case 'TRIP_PRICE':
+            return {...state,tripPrice:action.payload}
+
         default:{return state}
     }
 

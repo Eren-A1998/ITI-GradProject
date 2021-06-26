@@ -1,7 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
 export async function getLines() 
 {
-    console.log("line enter")
     let lines = []
     let LinesCollection = await firestore().collection('Lines').get();
     LinesCollection.docs.forEach((line) => {

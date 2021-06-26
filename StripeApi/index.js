@@ -1,15 +1,15 @@
 const express = require('express');
 const Stripe = require('stripe');
-
 const stripe = new Stripe('sk_test_51J3SJQCn1gZRGcxzFpuHlRS82XyiaA6P2ErHvikgHTOcSPShIkZ7kvk34r1coQ6mHTqs8tQuRmrOyGW9kDnAVqkJ00Tkeo0etk', {
 });
 const app = express();
 app.use(express.json());
 
 app.post('/create-payment-intent', (req, res) => {
+  console.log("body", req.body.Price);
   const paymentIntent = stripe.paymentIntents.create({
-    amount: 500,
-    currency: 'usd',
+    amount: (req.body.Price)*200,
+    currency: 'egp',
   }).then((payIntent)=>{
     console.log("hi", payIntent.client_secret);
      res.send({

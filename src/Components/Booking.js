@@ -5,6 +5,8 @@ import { connect, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { getLines } from './../Redux/actions/Lines';
 import { addTrip } from './../Redux/actions/tripActions';
+import { PacmanIndicator } from 'react-native-indicators';
+import { SCLAlert, SCLAlertButton } from 'react-native-scl-alert'
 
 const Booking = (props) => {
   const [fromStations, setFromStations] = useState([{ Name: "Please Select From Line First" }]);
@@ -14,6 +16,15 @@ const Booking = (props) => {
   const [fromLine, setFromLine] = useState();
   const [toLine, setToLine] = useState();
   const lines = useSelector(state => state.LineReducer.Lines)
+  const [Show, setShow] = useState(false);
+
+  const handleOpen = () => {
+    setShow(true);
+  }
+
+  const handleClose = () => {
+    setShow(false);
+  }
 
   useEffect(() => {
     props.getLines();
@@ -82,10 +93,10 @@ const Booking = (props) => {
           })}
         </Picker>
 
-        <Button title="Reserve" onPress={ () => {
-          var DateNow = Date(Date.now()) ;
-          var Expdate = new Date(new Date().getTime()+(2*24*60*60*1000));
-          var Limitdate = new Date(new Date().getTime()+(7*24*60*60*1000));
+        <Button title="Reserve" onPress={() => {
+          var DateNow = Date(Date.now());
+          var Expdate = new Date(new Date().getTime() + (2 * 24 * 60 * 60 * 1000));
+          var Limitdate = new Date(new Date().getTime() + (7 * 24 * 60 * 60 * 1000));
           var date = DateNow.toString()
           let Trip =
           {
@@ -99,18 +110,34 @@ const Booking = (props) => {
             Expdate,
             Limitdate
           }
-          if(to&&from&&fromLine&&toLine){
-          props.addTrip(Trip)
-          props.navigation.navigate('ReservationDetails');
-        }else{alert("Pls Select")}
-
-        }}></Button>
+          if (to && from && fromLine && toLine) 
+          {
+            props.addTrip(Trip)
+            props.navigation.navigate('ReservationDetails');
+          }
+          else {
+            handleOpen();
+            
+          }
+        }}>
+        </Button>
+        <SCLAlert
+              theme="danger"
+              show={Show}
+              title="Caution"
+              titleStyle={{ color: 'red' }}
+              cancellable={false}
+              subtitle="Select your path"
+              onRequestClose={handleClose}
+            >
+              <SCLAlertButton theme="default" onPress={handleClose}>Close</SCLAlertButton>
+        </SCLAlert>
       </View>
     );
   }
   else {
     return (
-      <Text>nooooooo pls</Text>
+      <PacmanIndicator color='orange' size={130} />
     );
   }
 }
@@ -120,7 +147,6 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state)
   return {
     lines: state.LineReducer.Lines,
   }
