@@ -5,11 +5,11 @@ const tripReducer = (state={},action)=>
         case 'ADD_TRIP':
             return {...state,trip:action.payload}
 
-        case 'PREV_TRIP':
-            return {...state,prevtrips:action.payload}
+        case 'WAITING_TRIP':
+            return {...state,waitingtrips:action.payload}
 
-        case 'UPCOMING_TRIP':
-            return {...state,upcomingtrips:action.payload}
+        case 'USER_TRIP':
+            return {...state,usertrips:action.payload}
 
         case 'TRIP_PRICE':
             return {...state,tripPrice:action.payload}

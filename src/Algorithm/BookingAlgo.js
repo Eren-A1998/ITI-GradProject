@@ -9,6 +9,12 @@ export const getStationsInbetweenSameLine = (sourceId, destinationId, lineNumber
     return path;
 }
 
+export const getStation=(stationID,LineID,lines)=>{
+    let line = lines[LineID - 1].Stations;
+   let arr= line.filter((station)=>station.ID==stationID);
+    return arr[0];
+}
+
 export const getPrice = (Path, checkLine) => {
     if (checkLine != undefined) {
         if (Path.length <= 9)

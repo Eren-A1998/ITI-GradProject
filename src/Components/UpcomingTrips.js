@@ -4,107 +4,44 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Iconf from 'react-native-vector-icons/Entypo';
 import { connect, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import {getTripsUserUpcoming} from '../Redux/actions/tripActions'
-import { useEffect } from 'react';
+import {getUserTrips} from '../Redux/actions/tripActions'
+import { useEffect,useState } from 'react';
+import {getStation} from '../Algorithm/BookingAlgo';
+import{getLines} from '../Redux/actions/Lines'
 
-
-/*const DATA = [
-  {
-    From: 'Sadat',
-    To: 'Helwan',
-    Date:"10/05/2021",
-    Time: "5:11 PM",
-    Price:7,
-    Status:"Completed",
-    Code:"K075",
-  },
-  {
-    From: 'Marg',
-    To: 'Helmea',
-    Date:"10/04/2021",
-    Time: "4:20 PM",
-    Price:5,
-    Status:"Canceled",
-    Code:"J11F",
-  },
-  {
-    From: 'Haroun',
-    To: 'Abbasya',
-    Date:"01/06/2021",
-    Time: "11:05 PM",
-    Price:5,
-    Status:"Completed",
-    Code:"X05K",
-  },
-  {
-    From: 'Sadat',
-    To: 'Helwan',
-    Date:"10/05/2021",
-    Time: "5:11 PM",
-    Price:7,
-    Status:"Completed",
-    Code:"F1LM",
-  },
-  {
-    From: 'Marg',
-    To: 'Helmea',
-    Date:"10/04/2021",
-    Time: "4:20 PM",
-    Price:5,
-    Status:"Canceled",
-    Code:"K075",
-  },
-  {
-    From: 'Haroun',
-    To: 'Abbasya',
-    Date:"01/06/2021",
-    Time: "11:05 PM",
-    Price:5,
-    Status:"Completed",
-    Code:"K075",
-  },
-  {
-    From: 'Sadat',
-    To: 'Helwan',
-    Date:"10/05/2021",
-    Time: "5:11 PM",
-    Price:7,
-    Status:"Completed",
-    Code:"K075",
-  },
-  {
-    From: 'Marg',
-    To: 'Helmea',
-    Date:"10/04/2021",
-    Time: "4:20 PM",
-    Price:5,
-    Status:"Canceled",
-    Code:"K075",
-  },
-  {
-    From: 'Haroun',
-    To: 'Abbasya',
-    Date:"01/06/2021",
-    Time: "11:05 PM",
-    Price:5,
-    Status:"Completed",
-    Code:"K075",
-  },
-];*/
 
 const UpcomingTrips = (props)=> {
-  console.log(props)
-  const {upcomingTrips} = props;
+ //const {Lines,setLines} =  useState([]);
+  const {usertrips} = props;
+  const {lines} = props;
 useEffect(()=>{
-    props.getTripsUserUpcoming(1);
+    props.getUserTrips(1);
+    props.getLines()
 },[]);
 
-  const RenderItem = ({ item }) => (
+  const RenderItem = ({ item }) =>{
+    var today =  new Date(item.date);
+    console.log(today)
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    console.log(date)
+    
+    var time = today.getHours() + ":" + today.getMinutes();
+    console.log(time)
+    
+
+
+    console.log(usertrips)
+    console.log(lines)
+    console.log(item)
+   let from  =  getStation(item.from,item.fromLine,lines).Name;
+   let to  =  getStation(item.to,item.toLine,lines).Name;
+ return (
+    
     <View style={styles.item}>
       <View style = {{flexDirection:'row'}}>
         <View>
-          <Text style = {styles.Date}> {item.to} </Text>
-          <Text style = {styles.Time}> {item.from} </Text>
+          <Text style = {styles.Date}> {date} </Text>
+          <Text style = {styles.Time}> {time} </Text>
         </View>
 
         <View style = {{marginLeft:10}}>
@@ -112,24 +49,25 @@ useEffect(()=>{
         </View>
 
         <View>
-          <Text style = {styles.From}> {item.toLine} </Text>
-          <Text style = {styles.To}> {item.To} </Text>
+          <Text style = {styles.From}> {from} </Text>
+          <Text style = {styles.To}> {to} </Text>
         </View>
       </View>
 
       <View style={{flexDirection:'row', marginTop:15}}>
-        <Text style={styles.Code}> {item.fromLine}</Text> 
+        <Text style={styles.Code}> {item.ID.substring(0,4)}</Text> 
         <Icon name="cash" size={30} color="green"></Icon>
-        <Text style={styles.Price}> {item.to} EGP </Text>
+        <Text style={styles.Price}> {item.price} EGP </Text>
         <Text style={styles.Status}> {item.payStatus}</Text> 
       </View>
     </View>
-  );
-  if(upcomingTrips){
+  );}
+  if(usertrips&&lines){
+    lines.sort(function (a, b) { return a.Number - b.Number });
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={upcomingTrips}
+        data={usertrips}
         renderItem={RenderItem}
         keyExtractor={item => item.date}/>
     </SafeAreaView>    
@@ -197,6 +135,9 @@ const styles = StyleSheet.create
     marginTop:7,
     fontSize:15,
     color:"gray",
+    fontWeight:'bold',
+    letterSpacing:2
+
   },
 
   Code:
@@ -209,13 +150,14 @@ const styles = StyleSheet.create
 });
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({getTripsUserUpcoming}, dispatch)
+  return bindActionCreators({getUserTrips,getLines}, dispatch)
 }
 
 const mapStateToProps = (state) => {
   console.log(state)
   return {
-    upcomingTrips: state.tripReducer.upcomingtrips,
+    usertrips: state.tripReducer.usertrips,
+    lines:state.LineReducer.Lines
   }
 }
 

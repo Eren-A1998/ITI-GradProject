@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Button, View } from 'react-native';
 import { connect } from 'react-redux';
 import { SCLAlert, SCLAlertButton } from 'react-native-scl-alert'
+import { bindActionCreators } from 'redux';
+import {updateTrip} from '../Redux/actions/tripActions'
 
 const PayPage = (props) => {
   const [Show, setShow] = useState(false);
@@ -29,8 +31,8 @@ const PayPage = (props) => {
   const [key, setKey] = useState('');
   useEffect(() => {
     console.log("hiii")
-    let Price = props.trip
-    fetch('http://192.168.1.14:3000/create-payment-intent', {
+    let Price = props.trip.tripPrice
+    fetch('http://192.168.1.7:3000/create-payment-intent', {
       headers: { 'Content-Type': 'application/json' },
       method: 'POST',
       body: JSON.stringify({ Price })
@@ -42,6 +44,8 @@ const PayPage = (props) => {
         // console.log(key);
       })
       .catch(e => Alert.alert(e.message));
+
+      return ()=>{console.log("Out")}
   }, []);
 
   const handleConfirmation = async () => {
@@ -57,6 +61,11 @@ const PayPage = (props) => {
 
       if (!error) {
         /* Update Trip Db */
+        const {trip} = props;
+       let obj = {price:trip.tripPrice,payStatus:"Paid"}
+        let id = trip.trip.tripID
+        console.log("Hi Trip",trip);
+        props.updateTrip(obj,id)
         setSsms(`Total fees ${paymentIntent?.amount / 200} EGP`);
         Open()
       }
@@ -106,23 +115,21 @@ const PayPage = (props) => {
           height: 50,
           marginVertical: 30,
         }}
-      // onCardChange={cardDetails => {
-      //   console.log('cardDetails', cardDetails);
-      // }}
-      // onFocus={focusedField => {
-      //   console.log('focusField', focusedField);
-      // }}
       />
       <Button title="Confirm payment" onPress={handleConfirmation} />
     </View>
   );
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({ updateTrip }, dispatch)
+}
+
 const mapStateToProps = (state) => {
-  console.log("s", state);
+  console.log("s", state.tripReducer);
   return {
-    trip: state.tripReducer.tripPrice,
+    trip: state.tripReducer,
   }
 }
 
-export default connect(mapStateToProps, null)(PayPage);
+export default connect(mapStateToProps, mapDispatchToProps)(PayPage);
