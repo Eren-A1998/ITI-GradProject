@@ -8,6 +8,8 @@ export default class FirebaseUtilities {
 
   public static signIn = (email, password) => {
   
+
+    
     return auth().signInWithEmailAndPassword(email, password);
   
   };
@@ -17,7 +19,7 @@ export default class FirebaseUtilities {
     return auth().createUserWithEmailAndPassword(email, password);
   
   };
-  public static signOut = (email, password) => {
+  public static signOut = () => {
     return auth().signOut();
   };
   public static  signInWithFacebook = async ()=>{
@@ -62,7 +64,7 @@ export default class FirebaseUtilities {
     if (loggedInUser != null) {
       return loggedInUser.uid;
     } else {
-      return 'no id is captured';
+      return null;
     }
   }
 }

@@ -8,6 +8,7 @@ export default class ImageUploderUtility {
     const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
     console.log(filename, '-->uri', uploadUri);
     const task = storage().ref(filename).putFile(uploadUri);
+
     return task;
   }
 }
