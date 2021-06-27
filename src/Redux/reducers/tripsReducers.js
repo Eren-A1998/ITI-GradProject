@@ -6,7 +6,7 @@ const tripReducer = (state={},action)=>
             return {...state,trip:action.payload}
 
         case 'WAITING_TRIP':
-            return {...state,waitingtrips:action.payload}
+            return {...state,pendingtrips:action.payload}
 
         case 'USER_TRIP':
             return {...state,usertrips:action.payload}

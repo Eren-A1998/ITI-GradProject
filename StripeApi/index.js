@@ -8,15 +8,14 @@ app.use(express.json());
 app.post('/create-payment-intent', (req, res) => {
   console.log("body", req.body.Price);
   const paymentIntent = stripe.paymentIntents.create({
-    amount: (req.body.Price)*200,
+    amount: (req.body.Price) * 200,
     currency: 'egp',
-  }).then((payIntent)=>{
-    console.log("hi", payIntent.client_secret);
-     res.send({
-    clientSecret: payIntent.client_secret,
-  });
-    console.log("then")})
-  .catch((e)=>{console.log(e)});
+  }).then((payIntent) => {
+    res.send({
+      clientSecret: payIntent.client_secret,
+    });
+  })
+    .catch((e) => { console.log(e) });
 });
 
 app.listen(3000, () => console.log('Server up'));

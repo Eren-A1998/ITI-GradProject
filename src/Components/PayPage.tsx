@@ -1,6 +1,6 @@
 import { CardField, useStripe } from '@stripe/stripe-react-native';
 import React, { useEffect, useState } from 'react';
-import { Alert, Button, View } from 'react-native';
+import { Alert, Button, View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { SCLAlert, SCLAlertButton } from 'react-native-scl-alert'
 import { bindActionCreators } from 'redux';
@@ -30,18 +30,15 @@ const PayPage = (props) => {
   const { confirmPayment } = useStripe();
   const [key, setKey] = useState('');
   useEffect(() => {
-    console.log("hiii")
     let Price = props.trip.tripPrice
-    fetch('http://192.168.1.7:3000/create-payment-intent', {
+    fetch('http://192.168.1.14:3000/create-payment-intent', {
       headers: { 'Content-Type': 'application/json' },
       method: 'POST',
       body: JSON.stringify({ Price })
     })
       .then(res => res.json())
       .then(res => {
-        // console.log('intent', res);
         setKey((res as { clientSecret: string }).clientSecret);
-        // console.log(key);
       })
       .catch(e => Alert.alert(e.message));
 
@@ -49,7 +46,6 @@ const PayPage = (props) => {
   }, []);
 
   const handleConfirmation = async () => {
-    console.log("down", nav);
     if (key) {
       const { paymentIntent, error } = await confirmPayment(key, {
         type: 'Card',
@@ -60,11 +56,9 @@ const PayPage = (props) => {
       });
 
       if (!error) {
-        /* Update Trip Db */
         const {trip} = props;
        let obj = {price:trip.tripPrice,payStatus:"Paid"}
         let id = trip.trip.tripID
-        console.log("Hi Trip",trip);
         props.updateTrip(obj,id)
         setSsms(`Total fees ${paymentIntent?.amount / 200} EGP`);
         Open()
@@ -107,13 +101,15 @@ const PayPage = (props) => {
           number: '4242 4242 4242 4242',
         }}
         cardStyle={{
-          backgroundColor: '#FFFFFF',
-          textColor: '#000000',
+          backgroundColor: '#E56717',
+          textColor: '#FFFFFF',
+          borderRadius:20,
         }}
         style={{
-          width: '100%',
+          width:"100%",
           height: 50,
-          marginVertical: 30,
+          marginTop:"50%",
+          marginBottom:20
         }}
       />
       <Button title="Confirm payment" onPress={handleConfirmation} />
@@ -121,12 +117,18 @@ const PayPage = (props) => {
   );
 };
 
+const styles = StyleSheet.create
+  ({
+    Pay:
+    {
+
+    },
+  })
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({ updateTrip }, dispatch)
 }
 
 const mapStateToProps = (state) => {
-  console.log("s", state.tripReducer);
   return {
     trip: state.tripReducer,
   }

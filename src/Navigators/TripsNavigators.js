@@ -1,14 +1,14 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import UpcomingTrips from '../Components/UpcomingTrips';
-import PreviousTrips from '../Components/PreviousTrips';
+import UpcomingTrips from '../Components/tripsHistory';
+import pindingTrips from '../Components/pendingTrips';
 const Tab = createMaterialTopTabNavigator();
 
 const TripsNavigators=()=> {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="UpcomingTrips" component={UpcomingTrips} />
-      <Tab.Screen name="PreviousTrips" component={PreviousTrips} />
+      <Tab.Screen name="tripsHistory" component={UpcomingTrips} />
+      <Tab.Screen name="pendingTrips" component={pindingTrips} />
     </Tab.Navigator>
   );
 }

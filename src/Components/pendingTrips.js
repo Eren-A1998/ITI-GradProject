@@ -1,20 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Iconf from 'react-native-vector-icons/Entypo';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import { getUserTrips } from '../Redux/actions/tripActions'
+import { getPendingTrips } from '../Redux/actions/tripActions'
 import { getStation } from '../Algorithm/BookingAlgo';
 import { getLines } from '../Redux/actions/Lines';
 import { PacmanIndicator } from 'react-native-indicators';
 
-const UpcomingTrips = (props) => {
+const pendingTrips = (props) => {
   const [Stop, setStop] = useState(false);
-  const { usertrips } = props;
+  const { pendingtrips } = props;
   const { lines } = props;
   useEffect(() => {
-    props.getUserTrips(1);
+    props.getPendingTrips(1);
     props.getLines()
   }, []);
 
@@ -25,10 +25,19 @@ const UpcomingTrips = (props) => {
     var Mins = today.getMinutes();
     var time = ("0" + Hours).slice(-2) + ":" + ("0" + Mins).slice(-2);
 
+    let ExpDate = new Date(item.Expdate);
+    let Expire = false;
+    if (today >= ExpDate) {
+      Expire = true;
+      item.payStatus = "Expired";
+      let obj = { payStatus: "Expired" }
+      let id = item.ID;
+    }
+
     let from = getStation(item.from, item.fromLine, lines).Name;
     let to = getStation(item.to, item.toLine, lines).Name;
     return (
-      <View style={styles.item}>
+      <View style={[styles.item, Expire ? styles.expireItem : styles.item]}>
         {/* <View style={{ flexDirection: 'row' }}>
           <Iconf name="back-in-time" size={20} color="#157DEC" style={{ marginLeft: "40%" }}></Iconf>
           <Text style={styles.Time}> {time} </Text>
@@ -58,22 +67,23 @@ const UpcomingTrips = (props) => {
     );
   }
 
-  if (usertrips && lines) {
+  if (pendingtrips && lines) {
     lines.sort(function (a, b) { return a.Number - b.Number });
-    usertrips.sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
+    pendingtrips.sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
     return (
       <SafeAreaView style={styles.container}>
         <FlatList
-          data={usertrips}
+          data={pendingtrips}
           renderItem={RenderItem}
           keyExtractor={item => item.ID} />
       </SafeAreaView>
     );
-  } 
+  }
+
   else {
     setTimeout(() => {
       setStop(true);
-    }, 20000);
+    }, 4000);
 
     if(Stop == false)
     {
@@ -106,6 +116,14 @@ const styles = StyleSheet.create
       marginHorizontal: 16,
     },
 
+    expireItem:
+    {
+      backgroundColor: '#C0C0C0',
+      padding: 20,
+      marginVertical: 8,
+      marginHorizontal: 16,
+    },
+
     Date:
     {
       fontFamily: 'Arial',
@@ -120,7 +138,7 @@ const styles = StyleSheet.create
     {
       fontFamily: 'Arial',
       fontSize: 17,
-      marginBottom: 5
+      marginBottom: 15
     },
 
     From:
@@ -147,7 +165,7 @@ const styles = StyleSheet.create
 
     Status:
     {
-      marginLeft: 50,
+      marginLeft: 40,
       marginTop: 5,
       fontSize: 15,
       color: "gray",
@@ -157,14 +175,14 @@ const styles = StyleSheet.create
   });
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ getUserTrips, getLines }, dispatch)
+  return bindActionCreators({ getPendingTrips, getLines }, dispatch)
 }
 
 const mapStateToProps = (state) => {
   return {
-    usertrips: state.tripReducer.usertrips,
+    pendingtrips: state.tripReducer.pendingtrips,
     lines: state.LineReducer.Lines
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UpcomingTrips);
+export default connect(mapStateToProps, mapDispatchToProps)(pendingTrips);

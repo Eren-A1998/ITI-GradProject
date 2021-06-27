@@ -17,6 +17,7 @@ const Booking = (props) => {
   const [toLine, setToLine] = useState();
   const lines = useSelector(state => state.LineReducer.Lines)
   const [Show, setShow] = useState(false);
+  const [Show1, setShow1] = useState(false);
 
   const handleOpen = () => {
     setShow(true);
@@ -26,6 +27,14 @@ const Booking = (props) => {
     setShow(false);
   }
 
+  const handleOpen1 = () => {
+    setShow1(true);
+  }
+
+  const handleClose1 = () => {
+    setShow1(false);
+  }
+
   useEffect(() => {
     props.getLines();
     console.log("Ana hena ya John")
@@ -33,13 +42,14 @@ const Booking = (props) => {
 
 
   if (lines != undefined) {
-    props.lines.sort(function (a, b) { return a.Number - b.Number });
+    props.lines.sort(function (a, b) { return b.Number - a.Number });
     return (
       <View style={{ width: '75%', alignSelf: 'center' }}>
         <Picker
           onValueChange={(value) => {
             setFromLine(value.Number);
             const x = lines.filter(line => line.Name == value.Name)[0].Stations;
+            x.sort(function (a, b) { return a.ID - b.ID });
             setFromStations(x);
             setFromStations((state) => {
               return state;
@@ -47,9 +57,9 @@ const Booking = (props) => {
           }}>
 
           {lines.map((val, index) => {
-            if (index == 0)
-              return <Picker.Item enabled={false} color="orange" key={val.Name} label={val.Name} value={val} />
-            return <Picker.Item key={val.Name} label={val.Name} value={val} />
+            if (index === 0)
+              return <Picker.Item enabled={false} color="green" key={val.Name} label={val.Name} value={val} />
+            return <Picker.Item key={val.Name} label={val.Name} color = "black" value={val} />
           })}
         </Picker>
 
@@ -57,9 +67,9 @@ const Booking = (props) => {
           onValueChange={(value) => {
             setFrom(value.ID);
           }}>
-          {fromStations.map((val) => {
-            if (val.Name == "Please Select Line First")
-              return <Picker.Item enabled={false} color="orange" key={val.Name} label={val.Name} value={val} />
+          {fromStations.map((val, index) => {
+            if (index == 0)
+              return <Picker.Item enabled={false} color="green" key={val.Name} label={val.Name} value={val} />
             return <Picker.Item key={val.Name} label={val.Name} color="black" value={val} />
           })}
         </Picker>
@@ -68,6 +78,7 @@ const Booking = (props) => {
           onValueChange={(value) => {
             setToLine(value.Number);
             const x = lines.filter(line => line.Name == value.Name)[0].Stations;
+            x.sort(function (a, b) { return a.ID - b.ID });
             setToStations(x);
             setToStations((state) => {
               return state;
@@ -75,9 +86,9 @@ const Booking = (props) => {
           }}>
 
           {lines.map((val, index) => {
-            if (index == 0)
-              return <Picker.Item enabled={false} color="orange" key={val.Name} label={val.Name} value={val} />
-            return <Picker.Item key={val.Name} label={val.Name} value={val} />
+            if (index === 0)
+              return <Picker.Item enabled={false} color="red" key={val.Name} label={val.Name} value={val} />
+            return <Picker.Item key={val.Name} label={val.Name} color = "black" value={val} />
           })}
         </Picker>
 
@@ -86,17 +97,17 @@ const Booking = (props) => {
             setTo(value.ID);
           }}
         >
-          {toStations.map((val) => {
-            if (val.Name == "Please Select Line First")
-              return <Picker.Item enabled={false} color="orange" key={val.Name} label={val.Name} value={val} />
+          {toStations.map((val, index) => {
+            if (val.Name == "Please Select To Line First" || val.Name == "Select station")
+              return <Picker.Item enabled={false} color="red" key={val.Name} label={val.Name} value={val} />
             return <Picker.Item key={val.Name} label={val.Name} color="black" value={val} />
           })}
         </Picker>
 
         <Button title="Reserve" onPress={() => {
-          var DateNow = Date(Date.now());
-          var Expdate = new Date(new Date().getTime() + (2 * 24 * 60 * 60 * 1000));
-          var Limitdate = new Date(new Date().getTime() + (7 * 24 * 60 * 60 * 1000));
+          var DateNow = new Date(Date.now()).toUTCString();
+          var Expdate = (new Date(new Date().getTime() + (2 * 24 * 60 * 60 * 1000))).toUTCString();
+          var Limitdate = new Date(new Date().getTime() + (7 * 24 * 60 * 60 * 1000)).toUTCString();
           var date = DateNow.toString()
           let Trip =
           {
@@ -110,27 +121,41 @@ const Booking = (props) => {
             Expdate,
             Limitdate
           }
-          if (to && from && fromLine && toLine) 
-          {
-            props.addTrip(Trip)
-            props.navigation.navigate('ReservationDetails');
+          if (to && from && fromLine && toLine) {
+            if (to == from)
+              handleOpen1();
+
+            else {
+              props.addTrip(Trip)
+              props.navigation.navigate('ReservationDetails');
+            }
           }
-          else {
+          else
             handleOpen();
-            
-          }
         }}>
         </Button>
         <SCLAlert
-              theme="danger"
-              show={Show}
-              title="Caution"
-              titleStyle={{ color: 'red' }}
-              cancellable={false}
-              subtitle="Select your path"
-              onRequestClose={handleClose}
-            >
-              <SCLAlertButton theme="default" onPress={handleClose}>Close</SCLAlertButton>
+          theme="danger"
+          show={Show}
+          title="Caution"
+          titleStyle={{ color: 'red' }}
+          cancellable={false}
+          subtitle="Select your path"
+          onRequestClose={handleClose}
+        >
+          <SCLAlertButton theme="default" onPress={handleClose}>Close</SCLAlertButton>
+        </SCLAlert>
+
+        <SCLAlert
+          theme="danger"
+          show={Show1}
+          title="Caution"
+          titleStyle={{ color: 'red' }}
+          cancellable={false}
+          subtitle="from station and to station mustn't be the same"
+          onRequestClose={handleClose1}
+        >
+          <SCLAlertButton theme="default" onPress={handleClose1}>Close</SCLAlertButton>
         </SCLAlert>
       </View>
     );
@@ -154,11 +179,6 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, mapDispatchToProps)(Booking);
 
-
-
-// console.log(getStationsWithFlags(1,2));
-// console.log(props.lines)}
-// console.log(getShortestPath(16, 5, 1, 3));
 /*
   1  2.
 

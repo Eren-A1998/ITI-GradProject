@@ -12,12 +12,13 @@ const ReservationDetails = (props) => {
 
   if (lines && trip) 
   {
+    lines.sort(function (a, b) { return a.Number - b.Number });
+    lines.pop();
     let path = getShortestPath(trip.from, trip.to, trip.fromLine, trip.toLine, lines);
-    console.log(path);
-    console.log(trip);
+    console.log("path",path);
+    console.log("trip",trip);
+    console.log("lines",lines);
     let Price = props.getTripPrice(path,trip).payload;
-    console.log(path.length);
-    console.log(Price);
     return (
       <View>
         <Button title="Paaaay" onPress={() => { props.navigation.navigate('Pay') }}></Button>
@@ -28,7 +29,7 @@ const ReservationDetails = (props) => {
   else
   {
     return (
-      <PacmanIndicator color='orange' />
+      <PacmanIndicator color='orange' size={130} />
     );
   }
 
@@ -39,7 +40,6 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     trip: state.tripReducer.trip,
     lines: state.LineReducer.Lines,
