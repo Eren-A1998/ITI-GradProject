@@ -14,7 +14,7 @@ const SliderPage2 = (props)=> {
             style={SliderStyle.skipButton} 
             onPress={()=>{
               //alert("navigate to Registration")
-              props.nav.navigate('Register')
+              props.nav.replace('Register')
             }}>
             <Text style={SliderStyle.skipTxt}>Skip</Text>
           </TouchableOpacity>

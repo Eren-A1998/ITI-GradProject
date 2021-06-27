@@ -1,10 +1,11 @@
 import { CardField, useStripe } from '@stripe/stripe-react-native';
 import React, { useEffect, useState } from 'react';
-import { Alert, Button, View, StyleSheet } from 'react-native';
+import { Alert, View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { SCLAlert, SCLAlertButton } from 'react-native-scl-alert'
 import { bindActionCreators } from 'redux';
-import {updateTrip} from '../Redux/actions/tripActions'
+import { updateTrip } from '../Redux/actions/tripActions'
+import { Button } from 'react-native-elements';
 
 const PayPage = (props) => {
   const [Show, setShow] = useState(false);
@@ -31,7 +32,7 @@ const PayPage = (props) => {
   const [key, setKey] = useState('');
   useEffect(() => {
     let Price = props.trip.tripPrice
-    fetch('http://192.168.1.14:3000/create-payment-intent', {
+    fetch('http://192.168.1.7:3000/create-payment-intent', {
       headers: { 'Content-Type': 'application/json' },
       method: 'POST',
       body: JSON.stringify({ Price })
@@ -42,7 +43,7 @@ const PayPage = (props) => {
       })
       .catch(e => Alert.alert(e.message));
 
-      return ()=>{console.log("Out")}
+    return () => { console.log("Out") }
   }, []);
 
   const handleConfirmation = async () => {
@@ -56,10 +57,10 @@ const PayPage = (props) => {
       });
 
       if (!error) {
-        const {trip} = props;
-       let obj = {price:trip.tripPrice,payStatus:"Paid"}
+        const { trip } = props;
+        let obj = { price: trip.tripPrice, payStatus: "Paid" }
         let id = trip.trip.tripID
-        props.updateTrip(obj,id)
+        props.updateTrip(obj, id)
         setSsms(`Total fees ${paymentIntent?.amount / 200} EGP`);
         Open()
       }
@@ -97,22 +98,15 @@ const PayPage = (props) => {
 
       <CardField
         postalCodeEnabled={false}
-        placeholder={{
-          number: '4242 4242 4242 4242',
-        }}
-        cardStyle={{
-          backgroundColor: '#E56717',
-          textColor: '#FFFFFF',
-          borderRadius:20,
-        }}
-        style={{
-          width:"100%",
-          height: 50,
-          marginTop:"50%",
-          marginBottom:20
-        }}
+        // placeholder={{
+        //   number: '4242 4242 4242 4242',
+        // }}
+        cardStyle={styles.cardStyle}
+        style={styles.cStyle}
       />
-      <Button title="Confirm payment" onPress={handleConfirmation} />
+      <View style={styles.Pay}>
+        <Button buttonStyle={styles.Pay} title="Confirm payment" onPress={handleConfirmation} />
+      </View>
     </View>
   );
 };
@@ -121,8 +115,24 @@ const styles = StyleSheet.create
   ({
     Pay:
     {
-
+      backgroundColor: '#F87431',
+      alignSelf: 'center',
+      borderRadius:10,
     },
+    cardStyle:
+    {
+      backgroundColor: '#43BFC7',
+      color: '#000000',
+      borderRadius: 20,
+    },
+    cStyle:
+    {
+      width: "95%",
+      height: 50,
+      marginTop: "50%",
+      marginLeft:10,
+      marginBottom: 10
+    }
   })
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({ updateTrip }, dispatch)

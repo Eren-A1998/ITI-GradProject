@@ -32,6 +32,25 @@ export const getPrice = (Path, checkLine) => {
         else if (Path.length > 16 && Path.length <= 40)
             return 10
     }
+}   //green   ping   yellow
+{/* #6EE7B7 #F472B6 FBBF24*/}
+export const getColor = (price, checkLine) => {
+    if (checkLine != undefined) {
+        if (price == 7)
+        return '#FBBF24'
+    else if (price==10)
+        return '##6EE7B7'
+    else if (price==12)
+        return '#F472B6'
+    }
+    else {
+        if (price == 5)
+            return '#FBBF24'
+        else if (price==7)
+            return '##6EE7B7'
+        else if (price==10)
+            return '#F472B6'
+    }
 }
 
 export const getStationsWithFlags = (fromLineNumber, flagNumber,lines) => {
@@ -52,7 +71,7 @@ export const getShortestPath = (sourceId, destinationId, sourceLineNumber, desti
 
         firstPath = getShortestPathInTwoLines(destinationId, firstFlags[0].ID, destinationLineNumber, Math.abs(sourceLineNumber - destinationLineNumber),lines);
         firstPath.reverse()
-        uniqueFirstPath = [...new Map(firstPath.map(item => [item["Name"], item])).values()];
+      let  uniqueFirstPath = [...new Map(firstPath.map(item => [item["Name"], item])).values()];
 
         lastPath = getShortestPathInTwoLines(firstFlags[0].ID, sourceId, Math.abs(sourceLineNumber - destinationLineNumber), sourceLineNumber,lines);
         lastPath.reverse();
