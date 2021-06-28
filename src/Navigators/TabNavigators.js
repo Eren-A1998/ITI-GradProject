@@ -11,8 +11,7 @@ const Tab = createMaterialBottomTabNavigator();
 
 const TabNavigators = () => {
     return (
-        <Tab.Navigator initialRouteName="Home"  activeColor="#f0edf6" inactiveColor="#6B7D8B" labeled={false}  barStyle={{ backgroundColor: '#0041C2' }} >
-            <Tab.Screen name="Home" component={HomeNavigators} options={{
+            <Tab.Navigator initialRouteName="Home"  activeColor="#ffffff" inactiveColor="#aaa9a9" labeled={false}  barStyle={{ backgroundColor: '#0041C2' }} >            <Tab.Screen name="Home" component={HomeNavigators} options={{
                 tabBarIcon: ({ color }) => (
                     <MaterialCommunityIcons name="home" color={color} size={28} />
                 ),
