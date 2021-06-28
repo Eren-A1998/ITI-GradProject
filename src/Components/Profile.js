@@ -5,7 +5,7 @@ import { ScrollView, StyleSheet, Image, Text } from "react-native";
 const Profile = (props) => {
   return (
     <ScrollView>
-      <View style={styles.Content}>
+      <View >
         <View style={styles.profileImgContainer}>
           <Image
             style={styles.profileImg}
@@ -20,13 +20,13 @@ const Profile = (props) => {
         <Button style={styles.btn} onPress={() => {
           props.navigation.navigate('Edit')
         }}>
-          <Text style={{ color: 'white', fontSize: 20 }}>Edit Profile</Text>
+          <Text style={{ color: 'white', fontSize: 20 ,fontWeight:"bold"}}>Edit Profile</Text>
         </Button>
 
         <Button style={styles.btn} onPress={() => {
           props.navigation.navigate('TripsHistory')
         }}>
-          <Text style={{ color: 'white', fontSize: 20 }}>Latest Trips</Text>
+          <Text style={{ color: 'white', fontSize: 20 ,fontWeight:"bold"}}>Latest Trips</Text>
         </Button>
       </View>
     </ScrollView>
@@ -51,20 +51,22 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   profileImg: {
-    height: 150,
-    width: 150,
+    height: 170,
+    width: 170,
     borderRadius: 100,
     //alignSelf:"center"
   },
   name: {
-    color: "white",
-    marginTop: 5,
+    //color: "white",
+    color:'black',
+    marginTop: 10,
     fontWeight: "bold",
     fontSize: 30,
     textAlign: "center"
   },
   email: {
-    color: "white",
+    //color: "white",
+    color:'black',
     marginTop: 5,
     fontSize: 18,
     textAlign: "center"
@@ -75,14 +77,14 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     justifyContent: 'center',
     padding: 20,
-    marginTop: 50,
+    marginTop: 40,
     borderTopLeftRadius: 70,
     borderTopRightRadius: 70
   },
 
   btn: {
     marginTop: 30,
-    padding: 30,
+    padding: 20,
     borderRadius: 20,
     backgroundColor: '#F87431',
     alignSelf: 'center',
