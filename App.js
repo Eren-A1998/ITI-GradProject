@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
 import RootReducer from './src/Redux/reducers/index'
 import Login from './src/Components/Login';
+import Splash from './src/Components/Splash';
 
 const Stack = createStackNavigator()
 const createStoreWithMW = applyMiddleware(PromiseMW)(createStore);
@@ -17,14 +18,15 @@ const createStoreWithMW = applyMiddleware(PromiseMW)(createStore);
 const App = () => {
   return (
     <Provider store={createStoreWithMW(RootReducer)}>
-      <NavigationContainer >
-        <Stack.Navigator headerMode="none">
-        <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen   name="TabNav" component={TabNavigators}/>
+      <NavigationContainer>
+        <Stack.Navigator headerMode="none" initialRouteName="Splash">
           <Stack.Screen name="onBoarding" component={OnBoarding} />
-          
+          <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="Login" component={Login} />
-
+          <Stack.Screen name="TabNav"
+            component={TabNavigators}
+          />
+          <Stack.Screen name="Splash" component={Splash}/>
           
         </Stack.Navigator>
       </NavigationContainer>
