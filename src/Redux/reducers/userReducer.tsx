@@ -1,5 +1,8 @@
 const UserReducer = (state = {}, action) => {
   switch (action.type) {
+    case 'USER_ID':
+      console.log("from reduser",action.payload)
+      return{...state,userID: action.payload}
     case 'SIGN_UP':
       return {...state, currentUser: action.payload};
     case 'SIGN_IN':
