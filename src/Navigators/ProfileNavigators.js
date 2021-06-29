@@ -24,9 +24,10 @@ const ProfileNavigators = (props)=>{
                 <Button
                 style={{height:35 ,backgroundColor:"#F87431",marginRight:6,paddingHorizontal:20,borderRadius:15}}
                   onPress={
-                      ()=>{
-                          FirebaseUtilities.signOut();
-                          
+                    async ()=>{
+                        await FirebaseUtilities.signOut();
+                        props.navigation.replace("Login")
+                         
                     }
                   }
                 >
