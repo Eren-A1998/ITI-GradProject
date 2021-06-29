@@ -13,7 +13,7 @@ const SliderPage3 = (props)=> {
               //alert("navigate to Registration")
               props.nav.replace('Register')
             }}>
-            <Text style={SliderStyle.skipTxt}>Register</Text>
+            <Text style={SliderStyle.skipTxt}>Skip</Text>
           </TouchableOpacity>
       </View>
       <View style={SliderStyle.message}>
@@ -22,18 +22,19 @@ const SliderPage3 = (props)=> {
         </Text>
       </View>
         <View>
-          <TouchableOpacity style={SliderStyle.bookBtn}
+          
+        <Image source={require('./booking.png')} 
+        style={{width:160 , height:140 , top:180, alignSelf:'center'}}
+        />
+        <TouchableOpacity style={SliderStyle.bookBtn}
           onPress={()=>{
            // alert("navigate to Registration")
            props.nav.replace('Register')
             
           }}
           >
-            <Text style={{alignSelf:'center',padding:6}}>Book Now</Text>
+            <Text style={{alignSelf:'center',padding:6}}>Getting Start</Text>
           </TouchableOpacity>
-        <Image source={require('./booking.png')} 
-        style={{width:160 , height:140 , top:200, alignSelf:'center'}}
-      />
         </View>
        </View>
     );
