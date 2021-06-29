@@ -19,12 +19,12 @@ const App = () => {
     <Provider store={createStoreWithMW(RootReducer)}>
       <NavigationContainer >
         <Stack.Navigator headerMode="none">
+        <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen   name="TabNav" component={TabNavigators}/>
           <Stack.Screen name="onBoarding" component={OnBoarding} />
-          <Stack.Screen name="Register" component={Register} />
+          
           <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="TabNav"
-            component={TabNavigators}
-          />
+
           
         </Stack.Navigator>
       </NavigationContainer>

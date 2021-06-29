@@ -1,35 +1,25 @@
 import { CardField, useStripe } from '@stripe/stripe-react-native';
 import React, { useEffect, useState } from 'react';
 import { Alert, View, StyleSheet } from 'react-native';
-import { connect } from 'react-redux';
 import { SCLAlert, SCLAlertButton } from 'react-native-scl-alert'
-import { bindActionCreators } from 'redux';
 import { updateTrip } from '../Redux/actions/tripActions'
 import { Button } from 'react-native-elements';
 
-const PayPage = (props) => {
-  const [Show, setShow] = useState(false);
+const PendingPay = (props) => {
   const [Show1, setShow1] = useState(false);
+  const [Show, setShow] = useState(false);
   const [Ssms, setSsms] = useState("");
   const [Fsms, setFsms] = useState("");
   const [key, setKey] = useState('');
+  
+  const{nav} = props
+  const handleClose = () => {
+    nav.navigate("Home")
+    setShow(false);
+  }
 
   const Open = () => {
     setShow(true);
-  }
- 
-  const handleClose = () => {
-    setTimeout(() => {
-      setShow(false);
-    }, 500);
-    setTimeout(()=>{
-      nav.navigate("TripsHistory")
-    },1000)
-    
-  }
-  const handleClose2 = () => {
-    nav.navigate("Home")
-    setShow(false);
   }
 
   const Open1 = () => {
@@ -39,10 +29,14 @@ const PayPage = (props) => {
   const handleClose1 = () => {
     setShow1(false);
   }
-  let { nav } = props
+
+  let { route } = props;
+  console.log("route",route)
+  let {item} = route.params
+
   const { confirmPayment } = useStripe();
   useEffect(() => {
-    let Price = props.trip.tripPrice
+    let Price = item.price
     fetch('http://192.168.1.7:3000/create-payment-intent', {
       headers: { 'Content-Type': 'application/json' },
       method: 'POST',
@@ -68,10 +62,9 @@ const PayPage = (props) => {
       });
 
       if (!error) {
-        const { trip } = props;
-        let obj = { price: trip.tripPrice, payStatus: "Paid" }
-        let id = trip.trip.tripID
-        props.updateTrip(obj, id)
+        let obj = { price: item.price, payStatus: "Paid" }
+        let id = item.ID
+        updateTrip(obj, id)
         setSsms(`Total fees ${paymentIntent?.amount / 200} EGP`);
         Open()
       }
@@ -93,7 +86,7 @@ const PayPage = (props) => {
         subtitle={Ssms}
         onRequestClose={handleClose}
         >
-        <SCLAlertButton theme="inverse" onPress={handleClose2}>Done</SCLAlertButton>
+        <SCLAlertButton theme="inverse" onPress={handleClose}>Done</SCLAlertButton>
       </SCLAlert>
 
       <SCLAlert
@@ -149,14 +142,6 @@ const styles = StyleSheet.create
       marginBottom: 10
     }
   })
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ updateTrip }, dispatch)
-}
 
-const mapStateToProps = (state) => {
-  return {
-    trip: state.tripReducer,
-  }
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(PayPage);
+export default PendingPay;

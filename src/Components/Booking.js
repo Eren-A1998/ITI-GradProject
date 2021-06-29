@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { View, Button, Text } from 'react-native';
+import { View, Text,StyleSheet,Image } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { connect, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux'
+import { getStation } from '../Algorithm/BookingAlgo'
 import { getLines } from './../Redux/actions/Lines';
 import { addTrip } from './../Redux/actions/tripActions';
 import { PacmanIndicator } from 'react-native-indicators';
+import { Button } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { SCLAlert, SCLAlertButton } from 'react-native-scl-alert'
 
 const Booking = (props) => {
+  
   const [fromStations, setFromStations] = useState([{ Name: "Please Select From Line First" }]);
   const [toStations, setToStations] = useState([{ Name: "Please Select To Line First" }]);
   const [from, setFrom] = useState();
@@ -18,6 +22,8 @@ const Booking = (props) => {
   const lines = useSelector(state => state.LineReducer.Lines)
   const [Show, setShow] = useState(false);
   const [Show1, setShow1] = useState(false);
+  const [Flag, setFlag] = useState(0);
+
 
   const handleOpen = () => {
     setShow(true);
@@ -35,18 +41,37 @@ const Booking = (props) => {
     setShow1(false);
   }
 
+    
   useEffect(() => {
     props.getLines();
     console.log("Ana hena ya John")
   }, [])
 
 
-  if (lines != undefined) {
-    props.lines.sort(function (a, b) { return b.Number - a.Number });
+  if(lines && Flag == 0){
+ 
+     lines.sort(function (a, b) { return a.Number - b.Number });
+     lines.forEach(line => 
+     {
+       if(line.Stations)
+         line.Stations.unshift({Name:"Select station",ID:0})
+     });
+   }
+
+  if(lines != undefined) {
+      props.lines.sort(function(a,b){ return b.Number - a.Number });
     return (
-      <View style={{ width: '75%', alignSelf: 'center' }}>
-        <Picker
+      <View style={{flex:1, width: '100%', alignSelf: 'center' , flexDirection:'column'  }}>
+        <View>
+          <View style={{backgroundColor:'#145DA0' , width:'100%' , height:130}}></View>
+          <Image style={{marginBottom:15,marginTop:-70, alignSelf:'center', width:'35%',height:140}} source={require('../../assets/metro.png')} ></Image>
+          </View>
+    {/* <View style={{marginTop:-50,marginBottom:20,backgroundColor:'#01949A'}}><Icon style={{alignSelf:'center'}} color="#E5DDC8" size={150} name="train-outline"></Icon></View> */}
+       <View style={{ alignSelf:'center', width:'75%'}}>
+        <Picker dropdownIconColor='#00b300'
           onValueChange={(value) => {
+            setFlag(1)
+         
             setFromLine(value.Number);
             const x = lines.filter(line => line.Name == value.Name)[0].Stations;
             x.sort(function (a, b) { return a.ID - b.ID });
@@ -58,12 +83,12 @@ const Booking = (props) => {
 
           {lines.map((val, index) => {
             if (index === 0)
-              return <Picker.Item enabled={false} color="green" key={val.Name} label={val.Name} value={val} />
-            return <Picker.Item key={val.Name} label={val.Name} color = "black" value={val} />
+              return <Picker.Item  enabled={false} color="green" key={val.Name} label={val.Name} value={val} />
+            return <Picker.Item  key={val.Name} label={val.Name} color="black" value={val} />
           })}
         </Picker>
 
-        <Picker
+        <Picker dropdownIconColor='#00b300'
           onValueChange={(value) => {
             setFrom(value.ID);
           }}>
@@ -74,8 +99,9 @@ const Booking = (props) => {
           })}
         </Picker>
 
-        <Picker
+        <Picker dropdownIconColor='#ff0000'
           onValueChange={(value) => {
+            setFlag(1)
             setToLine(value.Number);
             const x = lines.filter(line => line.Name == value.Name)[0].Stations;
             x.sort(function (a, b) { return a.ID - b.ID });
@@ -88,11 +114,11 @@ const Booking = (props) => {
           {lines.map((val, index) => {
             if (index === 0)
               return <Picker.Item enabled={false} color="red" key={val.Name} label={val.Name} value={val} />
-            return <Picker.Item key={val.Name} label={val.Name} color = "black" value={val} />
+            return <Picker.Item key={val.Name} label={val.Name} color="black" value={val} />
           })}
         </Picker>
 
-        <Picker
+        <Picker dropdownIconColor='#ff0000'
           onValueChange={(value) => {
             setTo(value.ID);
           }}
@@ -104,31 +130,34 @@ const Booking = (props) => {
           })}
         </Picker>
 
-        <Button title="Reserve" onPress={() => {
+        <Button buttonStyle={styles.Pay} title="Reserve" onPress={() => {
           var DateNow = new Date(Date.now()).toUTCString();
           var Expdate = (new Date(new Date().getTime() + (2 * 24 * 60 * 60 * 1000))).toUTCString();
           var Limitdate = new Date(new Date().getTime() + (7 * 24 * 60 * 60 * 1000)).toUTCString();
           var date = DateNow.toString()
-          let Trip =
-          {
+          let id = props.currentuser.id
+          let Trip ={
             from,
             to,
             fromLine,
             toLine,
-            userID: 1,
+            userID: id,
             payStatus: "Unpaid",
             date,
             Expdate,
             Limitdate
           }
-          if (to && from && fromLine && toLine) {
-            if (to == from)
-              handleOpen1();
+            if (to && from && fromLine && toLine) {
+                  lines.sort(function (a, b) { return a.Number - b.Number })
 
-            else {
-              props.addTrip(Trip)
-              props.navigation.navigate('ReservationDetails');
-            }
+
+                if (getStation(to, toLine, lines).Name === getStation(from, fromLine, lines).Name)
+                      handleOpen1();
+
+                else {
+                  props.addTrip(Trip)
+                  props.navigation.navigate('ReservationDetails');
+                }
           }
           else
             handleOpen();
@@ -158,6 +187,7 @@ const Booking = (props) => {
           <SCLAlertButton theme="default" onPress={handleClose1}>Close</SCLAlertButton>
         </SCLAlert>
       </View>
+      </View>
     );
   }
   else {
@@ -167,13 +197,29 @@ const Booking = (props) => {
   }
 }
 
+const styles = StyleSheet.create
+
+  ({
+
+    Pay:{
+      backgroundColor:'#0074B7',
+      alignSelf: 'center',
+      borderRadius:50,
+      width:'50%',
+      height:50,
+      marginTop:25
+    }
+  });
+
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({ getLines, addTrip }, dispatch)
 }
 
 const mapStateToProps = (state) => {
+  console.log(state);
   return {
     lines: state.LineReducer.Lines,
+    currentuser:state.UserReducer.currentUser
   }
 }
 

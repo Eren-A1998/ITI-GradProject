@@ -9,16 +9,6 @@ export default class ImagePickerUtility {
 
   public static imageFromGallary() {
     return ImagePicker.openPicker(this.options);
-      // .then(image => {
-      //   console.log('image uploaded', image);
-      //   const source = {uri: image.path};
-      //   console.log(source);
-      //   return source;
-      // })
-      // .catch(e => {
-      //   console.log('image error', e);
-      //   return 'error';
-      // });
   }
 
   public static imageFromCamera() {

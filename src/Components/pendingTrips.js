@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar } from 'react-native';
+import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Iconf from 'react-native-vector-icons/Entypo';
 import { connect } from 'react-redux';
@@ -8,13 +8,16 @@ import { getPendingTrips } from '../Redux/actions/tripActions'
 import { getStation } from '../Algorithm/BookingAlgo';
 import { getLines } from '../Redux/actions/Lines';
 import { PacmanIndicator } from 'react-native-indicators';
+import Iconi from 'react-native-vector-icons/Ionicons';
 
 const pendingTrips = (props) => {
   const [Stop, setStop] = useState(false);
   const { pendingtrips } = props;
   const { lines } = props;
+  const {currentuser}=props
+
   useEffect(() => {
-    props.getPendingTrips(1);
+    props.getPendingTrips(currentuser.id);
     props.getLines()
   }, []);
 
@@ -37,6 +40,10 @@ const pendingTrips = (props) => {
     let from = getStation(item.from, item.fromLine, lines).Name;
     let to = getStation(item.to, item.toLine, lines).Name;
     return (
+      <TouchableOpacity  underlayColor="#BDC3CB"
+      onPress={() => {
+        props.navigation.navigate('Pay',{item});
+      }}>
       <View style={[styles.item, Expire ? styles.expireItem : styles.item]}>
         {/* <View style={{ flexDirection: 'row' }}>
           <Iconf name="back-in-time" size={20} color="#157DEC" style={{ marginLeft: "40%" }}></Iconf>
@@ -44,6 +51,14 @@ const pendingTrips = (props) => {
         </View> */}
 
         <View style={{ flexDirection: 'row' }}>
+        <Iconi
+            details
+              onPress={()=>{ props.navigation.navigate('info',{item,lines}) }}
+              name='information-circle-sharp'
+              size={22}
+              style={{alignSelf:'center'}}
+              color='#0074B7'></Iconi>
+
           <View style={{ marginLeft: -5 }}>
             <Iconf name={"dots-three-vertical"} size={50} color="#FF8303"></Iconf>
           </View>
@@ -64,6 +79,7 @@ const pendingTrips = (props) => {
           <Text style={styles.Status}> {item.payStatus}</Text>
         </View>
       </View>
+      </TouchableOpacity>
     );
   }
 
@@ -181,7 +197,8 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
   return {
     pendingtrips: state.tripReducer.pendingtrips,
-    lines: state.LineReducer.Lines
+    lines: state.LineReducer.Lines,
+    currentuser:state.UserReducer.currentUser
   }
 }
 

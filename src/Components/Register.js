@@ -25,7 +25,7 @@ const Register = props => {
 
   return (
     <ScrollView>
-      <View style={registerStyle.container}>
+      <View  style={registerStyle.container}>
         <View style={{marginTop: 20}}>
           <Input
             placeholder="User Name"
@@ -100,7 +100,6 @@ const Register = props => {
                 userName,
                 email,
                 password,
-                confirmPassword,
                 phoneNumber,
                 gender,
               );
@@ -119,5 +118,12 @@ const Register = props => {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({signUpNewUser}, dispatch);
 };
-export default connect(null, mapDispatchToProps)(Register);
+const mapStateToProps = (state) => {
+  console.log(state);
+  return {
+    currentUser: state.UserReducer.currentUser,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Register);
 

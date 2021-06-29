@@ -1,21 +1,20 @@
 import React from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import {Button} from 'react-native-elements';
-import {connect} from 'react-redux';
-import {getTripPrice} from '../Redux/actions/tripActions';
 import {getShortestPath,getColor} from '../Algorithm/BookingAlgo';
-import {bindActionCreators} from 'redux';
 import {PacmanIndicator} from 'react-native-indicators';
 import Icon from 'react-native-vector-icons/Fontisto';
 import Iconf from 'react-native-vector-icons/FontAwesome';
 import Iconz from 'react-native-vector-icons/FontAwesome5';
 import { ScrollView } from 'react-native-gesture-handler';
 
-const ReservationDetails = props => {
-  const {trip} = props;
-  const {lines} = props;
+const info = (props)=> {
+  console.log("props",props)
+  const {route} = props
+  const {lines,item} = route.params;
+  console.log("route",route)
 
-  if (lines && trip) {
+  if (lines && item) {
     lines.sort(function (a, b) {
       return a.Number - b.Number;
     });
@@ -30,16 +29,16 @@ const ReservationDetails = props => {
           line.Stations.splice(i,1);
       });
     let path = getShortestPath(
-      trip.from,
-      trip.to,
-      trip.fromLine,
-      trip.toLine,
+      item.from,
+      item.to,
+      item.fromLine,
+      item.toLine,
       lines,
     );
     let res;
   
-    let Price = props.getTripPrice(path, trip).payload;
-   if(trip.fromLine==3||trip.toLine==3)
+   let Price = item.price;
+   if(item.fromLine==3||item.toLine==3)
      res= getColor(Price," ");
      else res = getColor(Price);
     return (
@@ -64,8 +63,8 @@ const ReservationDetails = props => {
               name={'dot-circle'}
               size={33}
               style={{marginVertical: 15,alignSelf:'center'}}
-              color={i==0||i==path.length-1?'#18A558':p.Flag==trip.fromLine||p.Flag==trip.toLine?'#DB1F48':'#055C9D'}></Iconz>
-           <Text style={{...styles.num , color:i==0||i==path.length-1?'#18A558':p.Flag==trip.fromLine||p.Flag==trip.toLine?'#DB1F48':'#055C9D'}}> {i+1}</Text>
+              color={i==0||i==path.length-1?'#18A558':p.Flag==item.fromLine||p.Flag==item.toLine?'#DB1F48':'#055C9D'}></Iconz>
+           <Text style={{...styles.num , color:i==0||i==path.length-1?'#18A558':p.Flag==item.fromLine||p.Flag==item.toLine?'#DB1F48':'#055C9D'}}> {i+1}</Text>
            <Text style={styles.name}>{p.Name}</Text>
             </View>
          );
@@ -99,32 +98,12 @@ const ReservationDetails = props => {
               <Text style={{marginTop:6}}>Start & End</Text>
           </View>
           </View>
-         
-          
-              
           </View>
-        <Button
-          buttonStyle={styles.Pay}
-          title="Pay Now"
-          onPress={() => {
-            props.navigation.navigate('Pay',{flag:"Details"});
-          }}></Button>
       </View>
     );
   } else {
     return <PacmanIndicator color="orange" size={130} />;
   }
-};
-
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({getTripPrice}, dispatch);
-};
-
-const mapStateToProps = state => {
-  return {
-    trip: state.tripReducer.trip,
-    lines: state.LineReducer.Lines,
-  };
 };
 
 const styles = StyleSheet.create({
@@ -158,4 +137,4 @@ const styles = StyleSheet.create({
   scroll:{alignSelf:'center'}
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReservationDetails);
+export default info;

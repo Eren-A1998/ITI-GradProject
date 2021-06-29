@@ -11,7 +11,7 @@ export const getStationsInbetweenSameLine = (sourceId, destinationId, lineNumber
 
 export const getStation=(stationID,LineID,lines)=>{
     let line = lines[LineID - 1].Stations;
-   let arr= line.filter((station)=>station.ID==stationID);
+   let arr = line.filter((station)=>station.ID==stationID);
     return arr[0];
 }
 
@@ -39,7 +39,7 @@ export const getColor = (price, checkLine) => {
         if (price == 7)
         return '#FBBF24'
     else if (price==10)
-        return '##6EE7B7'
+        return '#6EE7B7'
     else if (price==12)
         return '#F472B6'
     }
@@ -47,7 +47,7 @@ export const getColor = (price, checkLine) => {
         if (price == 5)
             return '#FBBF24'
         else if (price==7)
-            return '##6EE7B7'
+            return '#6EE7B7'
         else if (price==10)
             return '#F472B6'
     }

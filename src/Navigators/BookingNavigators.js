@@ -76,7 +76,8 @@ const handleClose1 = () => {
         )
       }} />
 
-      <Stack.Screen name="Pay" component={PayProvider} options={{
+      <Stack.Screen name="Pay" component={PayProvider}
+     /*  options={{
         headerLeft: () => (
           <TouchableWithoutFeedback
             onPress={() => {
@@ -106,7 +107,8 @@ const handleClose1 = () => {
             </View>
           </TouchableWithoutFeedback>
         )
-      }} />
+      }}*/
+       />
 
       <Stack.Screen name="TripsHistory" component={TripsNavigators} options={{
         headerLeft: () => (

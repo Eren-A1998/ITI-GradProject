@@ -2,37 +2,31 @@ import firestore from '@react-native-firebase/firestore';
 
 export default class userOperation {
   static usersCollection = firestore().collection('Users');
-  public static createNewUser(
-    id,
-    userName,
-    email,
-    password,
-    phoneNumber,
-    gender,
-  ) {
+  public static  createNewUser(id,userName,email,password,phoneNumber,gender) {
     console.log(userName, id);
     this.usersCollection
       .doc(id)
       .set({userName, email, password, phoneNumber, gender})
       .then(() => {
-        console.log('added to store', userName);
+        console.log('Done');
       })
       .catch(e => {
         console.log('store error', e);
       });
+      
   }
-  public static updateDataUser(id, userName, phoneNumber) {
-    const editedUser = this.usersCollection.doc(id).update({
+  public static async updateDataUser(id, userName, phoneNumber) {
+       await this.usersCollection.doc(id).update({
       userName: userName,
       phoneNumber: phoneNumber,
     });
-    return editedUser;
   }
-  public static updateProfilePhoto(id, image) {
-    this.usersCollection
+  public static  updateProfilePhoto(id, image) {
+    console.log("Hi From updateProfilePhoto" , id)
+     this.usersCollection
       .doc(id)
       .update({
-        image: image.uri,
+        image: image
       })
       .then(() => {
         console.log('image added', image);
@@ -40,5 +34,9 @@ export default class userOperation {
       .catch(e => {
         console.log('image error', e);
       });
+  }
+  public static async getUserByID(id) {
+    const User = await this.usersCollection.doc(id).get();
+    return User.data();
   }
 }

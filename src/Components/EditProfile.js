@@ -8,17 +8,23 @@ import {connect} from 'react-redux';
 import {editUserProfile} from '../Redux/actions/userActions';
 import UploadScreen from './ImageUploader';
 const EditProfile = props => {
-  const [userName, setUserName] = useState(props.userName);
-  const [phoneNumber, setPhoneNumber] = useState(props.phoneNumber);
+
+
+  const {uploadphoto} = props;
+  const {currentUser} = props;
+  console.log("ediiit", currentUser);
+  const [userName, setUserName] = useState(currentUser.userName);
+  const [phoneNumber, setPhoneNumber] = useState(currentUser.phoneNumber);
+  console.log(uploadphoto);
 
   return (
     <ScrollView>
       <View style={registerStyle.container}>
-        <UploadScreen />
+        <UploadScreen userImage={uploadphoto} user={currentUser} />
         <View style={{marginTop: 20}}>
           <Input
             style={registerStyle.inputStyle}
-            value={props.userName}
+            value={userName}
             keyboardType="ascii-capable"
             placeholder="User Name"
             leftIcon={<Icon name="user" style={registerStyle.iconStyle} />}
@@ -26,7 +32,7 @@ const EditProfile = props => {
           />
           <Input
             style={registerStyle.inputStyle}
-            value={props.phoneNumber}
+            value={phoneNumber}
             keyboardType="phone-pad"
             placeholder="Phone Number"
             leftIcon={<Icon name="phone" style={registerStyle.iconStyle} />}
@@ -47,9 +53,10 @@ const EditProfile = props => {
   );
 };
 const mapStateToProps = state => {
+  console.log(state)
   return {
-    userName: state.userName,
-    phoneNumber: state.phoneNumber,
+    currentUser:  state.UserReducer.currentUser,
+    uploadphoto: state.UserReducer.uploadphoto
   };
 };
 

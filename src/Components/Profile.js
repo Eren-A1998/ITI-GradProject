@@ -1,19 +1,27 @@
 import React from 'react';
 import { Button, View } from "native-base";
 import { ScrollView, StyleSheet, Image, Text } from "react-native";
+import { connect, useSelector } from 'react-redux';
 
 const Profile = (props) => {
+ const {currentuser} = props;
+  const{userImage} = props;
+  console.log("profile",currentuser)
+  let malePhoto = 'https://appvital.com/images/profile/file-uploader-api-profile-avatar-2.jpg';
+  let femalePhoto = 'https://www.independencebigs.org/wp-content/uploads/2018/08/bio-thumb-female-default.png';
+
+  let img = currentuser.image==undefined?userImage==undefined?currentuser.gender=='female'?femalePhoto:malePhoto:userImage.userImage:currentuser.image;
   return (
-    <ScrollView>
+    <View>
       <View style={styles.Content}>
         <View style={styles.profileImgContainer}>
           <Image
             style={styles.profileImg}
-            source={{ uri: "https://i.pinimg.com/originals/b2/82/b6/b282b6fc1eb5d8540c4e670bd95945c0.png" }}></Image>
+            source={{ uri: img }}></Image>
         </View>
 
-        <Text style={styles.name}>Jane Doe</Text>
-        <Text style={styles.email}>Jane Doe@gmail.com</Text>
+        <Text style={styles.name}>{currentuser.userName}</Text>
+        <Text style={styles.email}>{currentuser.email}</Text>
       </View>
 
       <View style={styles.btn_container}>
@@ -29,21 +37,28 @@ const Profile = (props) => {
           <Text style={{ color: 'white', fontSize: 20 }}>Latest Trips</Text>
         </Button>
       </View>
-    </ScrollView>
+    </View>
   );
 };
+const mapStateToProps = (state) => {
+  console.log(state);
+  return {
+    currentuser:state.UserReducer.currentUser,
+    userImage: state.UserReducer.uploadphoto
+  }
+}
 
-export default Profile;
+
+export default  connect(mapStateToProps,null)( Profile);
 
 
 const styles = StyleSheet.create({
   Content:
   {
-    backgroundColor: "#0041C2", 
+    backgroundColor: "#145DA0", 
     paddingBottom: 50, 
     borderBottomEndRadius: 50, 
     borderBottomStartRadius: 50,
-    marginTop:8,
   },
   profileImgContainer: {
     marginTop: 30,
@@ -54,7 +69,6 @@ const styles = StyleSheet.create({
     height: 150,
     width: 150,
     borderRadius: 100,
-    //alignSelf:"center"
   },
   name: {
     color: "white",
@@ -75,7 +89,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     justifyContent: 'center',
     padding: 20,
-    marginTop: 50,
+    marginTop: 10,
     borderTopLeftRadius: 70,
     borderTopRightRadius: 70
   },
