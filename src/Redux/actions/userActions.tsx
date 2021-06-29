@@ -150,3 +150,12 @@ export async function uploadProfileImage(image) {
     payload,
   };
 }
+export function getUserID()
+{
+  let payload = FirebaseUtilities.getUserId();
+  console.log("userID payload ",payload)
+  return {
+    type:'USER_ID',
+    payload
+  }
+}
