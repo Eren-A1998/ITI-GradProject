@@ -62,7 +62,7 @@ export default class FirebaseUtilities {
     //navigatMe();
     const loggedInUser = auth().currentUser;
     if (loggedInUser != null) {
-      return loggedInUser.uid;
+      return loggedInUser;
     } else {
       return null;
     }
