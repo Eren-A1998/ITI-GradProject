@@ -20,6 +20,7 @@ const SliderStyle =StyleSheet.create({
     skipTxt:{
         alignSelf:'center',
         color:'black',
+        padding:5
         
     },
     header:{
@@ -42,9 +43,9 @@ const SliderStyle =StyleSheet.create({
     },
     bookBtn:{
         alignSelf:'center',
-        top:140,
-         width:150,
-         height:40,
+        top:280,
+        width:150,
+        height:40,
         borderRadius:15,
         backgroundColor:'#4acfd9',
         borderWidth:2
