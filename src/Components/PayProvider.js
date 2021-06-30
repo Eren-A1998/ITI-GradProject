@@ -7,8 +7,8 @@ import PendingPay from './pendingPay'
 const PayProvider = (props) => 
 {
   const {route} = props;
-  const {flag} = route.params;
-  if(flag) //details
+  const {flag, item} = route.params;
+  if(flag) //pay
   {
     return (
       <StripeProvider
@@ -20,12 +20,12 @@ const PayProvider = (props) =>
     );
   }
 
-  //
+  //pending pay
   return (
     <StripeProvider
       publishableKey="pk_test_51J3SJQCn1gZRGcxz49CjzOoJgMFTN2TuziQwCn9V9qkfUH00zT2lWlJY66erei6ybhC34vM2CIDPetJQYTS8DzFH00iJCyaLjy">
       <SafeAreaView>
-        <PendingPay nav = {props.navigation} />
+        <PendingPay nav = {props.navigation} item={item} />
       </SafeAreaView>
     </StripeProvider>
   );

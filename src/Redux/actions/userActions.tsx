@@ -3,16 +3,19 @@ import userOperation from './../../Utilities/firebaseDatabase';
 import ImageUploderUtility from './../../Utilities/firebaseStorage';
 
 
+
+
 export async function signUpNewUser(userName, email, password, phoneNumber, gender) {
   let payload = null;
   try{
+     await FirebaseUtilities.checkEmailIsExist(email)
+      
     let res = await FirebaseUtilities.signUp(email, password)
     let id = res.user.uid;
-    userOperation.createNewUser(
+  await  userOperation.createNewUser(
       id,
       userName,
       email,
-      password,
       phoneNumber,
       gender,
     
@@ -29,52 +32,54 @@ export async function signUpNewUser(userName, email, password, phoneNumber, gend
   }
   catch(error){
     if (error.code === 'auth/email-already-in-use') {
-          console.log('That email address is already in use!');
+          return {
+            type: 'SIGN_UP',
+            payload,
+          };
         }
   
         if (error.code === 'auth/invalid-email') {
-          console.log('That email address is invalid!');
+          return {
+            type: 'SIGN_UP',
+            payload,
+          };
         }
   }
-  
- 
-
-    // .then((e) => {
-    //   console.log('user Created', e.user.uid);
-    //   id = e.user.uid;
-    //   // id = FirebaseUtilities.getUserId();
-    //   console.log('id->', id);
-
-  
-      
-
-    // })
-    // .catch(error => {
-    //   if (error.code === 'auth/email-already-in-use') {
-    //     console.log('That email address is already in use!');
-    //   }
-
-    //   if (error.code === 'auth/invalid-email') {
-    //     console.log('That email address is invalid!');
-    //   }
-    // });
-     
   return {
     type: 'SIGN_UP',
     payload,
   };
 }
 
-export function signInUser(email, password) {
+export async function signInUser(email, password) {
   let payload = null;
-  FirebaseUtilities.signIn(email, password)
-    .then(() => {
-      payload = FirebaseUtilities.getUserId();
-    })
-    .catch(e => {
-      console.log('Error Sign in', e);
-    });
-
+  try{
+  let res  = await FirebaseUtilities.signIn(email, password);
+  let id = res.user.uid;
+  let user  =  await userOperation.getUserByID(id)
+  payload = {
+    id,...user
+  }
+}catch(e){
+  if(e.code=="auth/invalid-email"){
+    return {
+      type: 'SIGN_IN',
+      payload,
+    }
+  }
+  if(e.code=="auth/user-not-found"){
+    return {
+      type: 'SIGN_IN',
+      payload,
+    }
+  }
+  if(e.code=="auth/wrong-password"){
+    return {
+      type: 'SIGN_IN',
+      payload,
+    }
+  }
+} 
   return {
     type: 'SIGN_IN',
     payload,
@@ -94,6 +99,13 @@ export function facebookSignIn() {
   };
 }
 
+export  function clearUser() {
+  return {
+    type: 'CLEAR_USER',
+    payload:{},
+  };
+}
+
 export function googleSignIn() {
   let payload = null;
   FirebaseUtilities.signInWithGoogle()
@@ -110,21 +122,10 @@ export function googleSignIn() {
 
 export async function editUserProfile(userName, phoneNumber) {
   let payload ;
-  let id = FirebaseUtilities.getUserId();
-  console.log('id->', id);
-  //this is only for testing
-  // let id = 'GAPvSWEanmNif4y5NjSklCyEk002';
-  // console.log('id->', id);
-  userOperation.updateDataUser(id, userName, phoneNumber);
-    // .then(async res => {
-    //   console.log('User updated!');
-    // })
-    // .catch(e => {
-    //   console.log('sorry User is not updated -_-', 'error : ', e);
-    // });
+  let id = FirebaseUtilities.getUserId().uid;
+ await userOperation.updateDataUser(id, userName, phoneNumber);
     let userData = await userOperation.getUserByID(id);
     payload = {id, ...userData} 
-    console.log('payload',payload);
   return {
     type: 'EDIT_PROFILE',
     payload,
@@ -134,26 +135,40 @@ export async function editUserProfile(userName, phoneNumber) {
 export async function uploadProfileImage(image) {
   let payload = null;
   
-  console.log("Zy Ma Aya Bt2ol")
   let link =  await ImageUploderUtility.uploadImageToStorage(image)
-  console.log('my Linkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk',link);
-  let id = FirebaseUtilities.getUserId();
-  console.log("ssss",id);
+  let id = FirebaseUtilities.getUserId().uid;
   userOperation.updateProfilePhoto(id, link);
   payload = {
     userImage:link,
     id
   };
-  console.log('PayLoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaad',payload);
   return {
     type: 'UPLOAD_IMAGE',
     payload,
   };
 }
-export function getUserID()
+
+
+export async function logOut()
 {
-  let payload = FirebaseUtilities.getUserId();
-  console.log("userID payload ",payload)
+  let payload = {}
+    await FirebaseUtilities.signOut();
+
+return {
+  type:"SIGN_OUT",
+  payload
+}
+}
+
+export async function getUserID()
+{
+  let payload;
+  let res = FirebaseUtilities.getUserId();
+  if(res!=null){
+  let user =  await userOperation.getUserByID(res.uid)
+  let id = res.uid
+   payload = {...user , id}
+  }
   return {
     type:'USER_ID',
     payload

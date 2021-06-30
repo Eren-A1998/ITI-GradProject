@@ -6,7 +6,6 @@ import { connect, useSelector } from 'react-redux';
 const Profile = (props) => {
  const {currentuser} = props;
   const{userImage} = props;
-  console.log("profile",currentuser)
   let malePhoto = 'https://appvital.com/images/profile/file-uploader-api-profile-avatar-2.jpg';
   let femalePhoto = 'https://www.independencebigs.org/wp-content/uploads/2018/08/bio-thumb-female-default.png';
 
@@ -14,6 +13,7 @@ const Profile = (props) => {
   return (
     <View>
       <View style={styles.Content}>
+        
         <View style={styles.profileImgContainer}>
           <Image
             style={styles.profileImg}
@@ -26,7 +26,7 @@ const Profile = (props) => {
 
       <View style={styles.btn_container}>
         <Button style={styles.btn} onPress={() => {
-          props.navigation.navigate('Edit')
+          props.navigation.navigate('editProfile')
         }}>
           <Text style={{ color: 'white', fontSize: 20 ,fontWeight:"bold"}}>Edit Profile</Text>
         </Button>
@@ -41,7 +41,6 @@ const Profile = (props) => {
   );
 };
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     currentuser:state.UserReducer.currentUser,
     userImage: state.UserReducer.uploadphoto
@@ -71,16 +70,14 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   name: {
-    //color: "white",
-    color:'black',
+    color:'white',
     marginTop: 10,
     fontWeight: "bold",
     fontSize: 30,
     textAlign: "center"
   },
   email: {
-    //color: "white",
-    color:'black',
+    color:'white',
     marginTop: 5,
     fontSize: 18,
     textAlign: "center"

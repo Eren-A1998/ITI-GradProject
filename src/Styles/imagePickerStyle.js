@@ -2,21 +2,20 @@ import {StyleSheet} from 'react-native';
 
 export default styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fbe3c4',
     alignSelf: 'stretch',
     borderRadius: 25,
     alignItems: 'center',
-    padding: '5%',
-    margin: '5%',
+    padding: '1%',
+    margin: '0%',
   },
   selectButton: {
-    width: 150,
+    width: 120,
     height: 50,
-    marginLeft: 240,
-    marginRight: 40,
+    marginHorizontal:25,
     marginTop: 20,
-    backgroundColor: '#2596be',
-    justifyContent: 'center',
+    backgroundColor: '#0074B7',
+    alignItems:'center',
+    justifyContent:'center',
     borderRadius: 25,
   },
   uploadButton: {
@@ -27,11 +26,6 @@ export default styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: -49,
     marginRight: 200,
-  },
-  buttonText: {
-    fontSize: 30,
-    color: 'white',
-    textAlign: 'center',
   },
   imageContainer: {
     marginTop: 30,

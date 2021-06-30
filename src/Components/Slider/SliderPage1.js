@@ -2,10 +2,10 @@ import React ,{useRef,useEffect}from 'react';
 import {Animated} from 'react-native'
 import {Text,View,TouchableOpacity,Image} from 'react-native';
 import SliderStyle from '../../Styles/SliderStyle'
+import Icon from 'react-native-vector-icons/Entypo';
 
 const SliderPage1 = (props)=> {
   useEffect(()=>{
-    // console.log(props.nav)
    fadeIn()
    startShake()
  
@@ -36,15 +36,13 @@ const SliderPage1 = (props)=> {
     return (
     <View style={SliderStyle.container}>
       <View >
-          <View >
+          <View>
           <Text style={SliderStyle.headerText} >{props.titl}</Text>
           </View>
           <TouchableOpacity
             style={SliderStyle.skipButton} 
             onPress={()=>{
-              //alert("navigate to Registration")
-              // console.log(props.nav)
-              props.nav.navigate('Register')
+              props.nav.replace('Register')
               
             }
 
@@ -54,7 +52,8 @@ const SliderPage1 = (props)=> {
           </TouchableOpacity>
       </View>   
       <View style={SliderStyle.message}>
-        <Text style={SliderStyle.messageTxt}>
+      <Icon name = "dot-single" size = {40} color="#214358"></Icon>
+        <Text style={SliderStyle.messageText}>
           {props.message}
         </Text>
       </View>

@@ -4,11 +4,13 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Iconf from 'react-native-vector-icons/Entypo';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import { getPendingTrips } from '../Redux/actions/tripActions'
+import { getPendingTrips,clearPendingTrips } from '../Redux/actions/tripActions'
 import { getStation } from '../Algorithm/BookingAlgo';
 import { getLines } from '../Redux/actions/Lines';
 import { PacmanIndicator } from 'react-native-indicators';
 import Iconi from 'react-native-vector-icons/Ionicons';
+import { useFocusEffect } from '@react-navigation/native';
+
 
 const pendingTrips = (props) => {
   const [Stop, setStop] = useState(false);
@@ -16,10 +18,15 @@ const pendingTrips = (props) => {
   const { lines } = props;
   const {currentuser}=props
 
-  useEffect(() => {
+
+  useFocusEffect(
+    React.useCallback (() => {
+    
     props.getPendingTrips(currentuser.id);
     props.getLines()
-  }, []);
+    return ()=>{props.clearPendingTrips()}
+
+  }, []));
 
   const RenderItem = ({ item }) => {
     var today = new Date(item.date);
@@ -40,9 +47,10 @@ const pendingTrips = (props) => {
     let from = getStation(item.from, item.fromLine, lines).Name;
     let to = getStation(item.to, item.toLine, lines).Name;
     return (
-      <TouchableOpacity  underlayColor="#BDC3CB"
-      onPress={() => {
-        props.navigation.navigate('Pay',{item});
+      <TouchableOpacity disabled={Expire} underlayColor="#BDC3CB"
+      
+      onPress={async() => {
+         await props.navigation.replace('Pay',{item});
       }}>
       <View style={[styles.item, Expire ? styles.expireItem : styles.item]}>
         {/* <View style={{ flexDirection: 'row' }}>
@@ -83,7 +91,7 @@ const pendingTrips = (props) => {
     );
   }
 
-  if (pendingtrips && lines) {
+  if (pendingtrips?.length && lines) {
     lines.sort(function (a, b) { return a.Number - b.Number });
     pendingtrips.sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
     return (
@@ -97,9 +105,9 @@ const pendingTrips = (props) => {
   }
 
   else {
-    setTimeout(() => {
+  let x =   setTimeout(() => {
       setStop(true);
-    }, 4000);
+    }, 5000);
 
     if(Stop == false)
     {
@@ -109,8 +117,14 @@ const pendingTrips = (props) => {
     }
     else
     {
+clearTimeout(x);
+
       return(
-        <View><Text>No Trips till now</Text></View>
+        <View style={{flex: 1, 
+          alignItems: 'center',
+          justifyContent: 'center', }}>
+          <Text style={{fontWeight:'bold' , fontSize:20}}>No Trips till now</Text>
+        </View>
       )
     }
   }
@@ -191,7 +205,7 @@ const styles = StyleSheet.create
   });
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ getPendingTrips, getLines }, dispatch)
+  return bindActionCreators({ getPendingTrips, getLines,clearPendingTrips }, dispatch)
 }
 
 const mapStateToProps = (state) => {

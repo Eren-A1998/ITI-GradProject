@@ -12,21 +12,25 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Iconf from 'react-native-vector-icons/Entypo';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {getUserTrips} from '../Redux/actions/tripActions';
+import {getUserTrips,clearUserTrips} from '../Redux/actions/tripActions';
 import {getStation} from '../Algorithm/BookingAlgo';
 import {getLines} from '../Redux/actions/Lines';
 import {PacmanIndicator} from 'react-native-indicators';
 import Iconi from 'react-native-vector-icons/Ionicons';
+import { useFocusEffect } from '@react-navigation/native';
+
 
 const UpcomingTrips = props => {
   const [Stop, setStop] = useState(false);
   const {usertrips} = props;
   const {lines} = props;
   const {currentuser} = props;
-  useEffect(() => {
+    useFocusEffect(
+     React.useCallback (() => {
     props.getUserTrips(currentuser.id);
     props.getLines();
-  }, []);
+        return ()=>{props.clearUserTrips()}
+  },[]));
 
   const RenderItem = ({item}) => {
     var today = new Date(item.date);
@@ -94,7 +98,7 @@ const UpcomingTrips = props => {
     );
   };
 
-  if (usertrips && lines) {
+  if (usertrips?.length && lines) {
     lines.sort(function (a, b) {
       return a.Number - b.Number;
     });
@@ -111,16 +115,19 @@ const UpcomingTrips = props => {
       </SafeAreaView>
     );
   } else {
-    setTimeout(() => {
+   let x= setTimeout(() => {
       setStop(true);
-    }, 20000);
+    }, 5000);
 
     if (Stop == false) {
       return <PacmanIndicator color="orange" size={130} />;
     } else {
+clearTimeout(x);
       return (
-        <View>
-          <Text>No Trips till now</Text>
+        <View style={{flex: 1, 
+          alignItems: 'center',
+          justifyContent: 'center', }}>
+          <Text style={{fontWeight:'bold' , fontSize:20}}>No Trips till now</Text>
         </View>
       );
     }
@@ -185,7 +192,7 @@ const styles = StyleSheet.create({
 });
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({getUserTrips, getLines}, dispatch);
+  return bindActionCreators({getUserTrips, getLines,clearUserTrips}, dispatch);
 };
 
 const mapStateToProps = state => {

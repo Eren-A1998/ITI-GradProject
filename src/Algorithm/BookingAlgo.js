@@ -32,8 +32,7 @@ export const getPrice = (Path, checkLine) => {
         else if (Path.length > 16 && Path.length <= 40)
             return 10
     }
-}   //green   ping   yellow
-{/* #6EE7B7 #F472B6 FBBF24*/}
+}
 export const getColor = (price, checkLine) => {
     if (checkLine != undefined) {
         if (price == 7)

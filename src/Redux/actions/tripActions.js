@@ -2,7 +2,6 @@ import firestore from '@react-native-firebase/firestore';
 import { getPrice } from '../../Algorithm/BookingAlgo'
 export async function addTrip(trip) {
     let res = await firestore().collection('Trips').add(trip);
-    console.log("resss",res);
     trip.tripID = res.id;
     return {
         type: 'ADD_TRIP',
@@ -31,6 +30,19 @@ export async function getPendingTrips(userid) {
 
 }
 
+export  function clearPendingTrips() {
+    return {
+        type:"CLEAR_WAITING_TRIPS",
+        payload:{}
+    }
+}
+export  function clearUserTrips() {
+    return {
+        type:"CLEAR_USER_TRIPS",
+        payload:{}
+    }
+}
+
 export async function getUserTrips(userid) {
     let trips = []
     let res = await firestore().collection('Trips').where('userID', '==', userid).where('payStatus', '==', 'Paid').get();
@@ -55,6 +67,14 @@ export function getTripPrice(path, trip) {
     return {
         type: 'TRIP_PRICE',
         payload: Price
+    }
+}
+
+export function clearTrips() {
+    
+    return {
+        type: 'CLEAR_TRIP',
+        payload: null
     }
 }
 

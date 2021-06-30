@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import {Button} from 'react-native-elements';
 import {connect} from 'react-redux';
@@ -10,10 +10,17 @@ import Icon from 'react-native-vector-icons/Fontisto';
 import Iconf from 'react-native-vector-icons/FontAwesome';
 import Iconz from 'react-native-vector-icons/FontAwesome5';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useFocusEffect } from '@react-navigation/native';
+import { updateTrip,clearTrips } from '../Redux/actions/tripActions'
 
 const ReservationDetails = props => {
   const {trip} = props;
   const {lines} = props;
+
+useEffect(()=>{
+  return ()=>{props.clearTrips();
+  }
+},[])
 
   if (lines && trip) {
     lines.sort(function (a, b) {
@@ -39,6 +46,11 @@ const ReservationDetails = props => {
     let res;
   
     let Price = props.getTripPrice(path, trip).payload;
+    let obj = { price: Price}
+    let id = trip.tripID
+    props.updateTrip(obj, id)
+
+
    if(trip.fromLine==3||trip.toLine==3)
      res= getColor(Price," ");
      else res = getColor(Price);
@@ -50,7 +62,7 @@ const ReservationDetails = props => {
           style={{marginVertical: 15, alignSelf: 'center'}}
           color={res}></Icon>
           
-          <Text style={{fontSize:20,alignSelf:'center'}}>{Price} EGP</Text>
+          <Text style={{fontSize:20,alignSelf:'center',fontWeight:'bold'}}>{Price} EGP</Text>
 
 
     <View style={{backgroundColor:'#E3E8E9',marginTop:20,marginBottom:25}}>
@@ -74,7 +86,7 @@ const ReservationDetails = props => {
       </ScrollView>
     </View>
           <View style={{marginBottom:35}}>
-          <View style={{marginLeft:15,flexDirection:'row'}}>
+          <View style={{alignSelf:'center', flexDirection:'row'}}>
           <Iconf
               name={'circle'}
               size={20}
@@ -117,7 +129,7 @@ const ReservationDetails = props => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({getTripPrice}, dispatch);
+  return bindActionCreators({getTripPrice, updateTrip,clearTrips}, dispatch);
 };
 
 const mapStateToProps = state => {

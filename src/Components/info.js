@@ -9,10 +9,8 @@ import Iconz from 'react-native-vector-icons/FontAwesome5';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const info = (props)=> {
-  console.log("props",props)
   const {route} = props
   const {lines,item} = route.params;
-  console.log("route",route)
 
   if (lines && item) {
     lines.sort(function (a, b) {
@@ -49,7 +47,7 @@ const info = (props)=> {
           style={{marginVertical: 15, alignSelf: 'center'}}
           color={res}></Icon>
           
-          <Text style={{fontSize:20,alignSelf:'center'}}>{Price} EGP</Text>
+          <Text style={{fontSize:20,alignSelf:'center',fontWeight:'bold'}}>{Price} EGP</Text>
 
 
     <View style={{backgroundColor:'#E3E8E9',marginTop:20,marginBottom:25}}>
@@ -72,8 +70,8 @@ const info = (props)=> {
         }  )} 
       </ScrollView>
     </View>
-          <View style={{marginBottom:35}}>
-          <View style={{marginLeft:15,flexDirection:'row'}}>
+          <View >
+          <View style={{alignSelf:'center',flexDirection:'row'}}>
           <Iconf
               name={'circle'}
               size={20}

@@ -12,3 +12,13 @@ export async function getLines()
     }
 
 }
+
+export async function clearLines() 
+{
+    
+    return {
+        type: 'CLEAR_LINES',
+        payload: null
+    }
+
+}

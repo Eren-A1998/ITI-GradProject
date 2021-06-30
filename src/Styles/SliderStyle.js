@@ -4,7 +4,6 @@ const SliderStyle =StyleSheet.create({
         flex:1,
         padding: 24,
         backgroundColor: "#eaeaea",
-      //  backgroundColor:"#fbe3c4",
         position:"relative"
     },
    
@@ -23,23 +22,23 @@ const SliderStyle =StyleSheet.create({
         padding:5
         
     },
-    header:{
-        alignSelf:'center',
-        fontWeight:"bold",
-        fontSize:20
-
-    },
     headerText:{
-        fontSize:20,
+        fontSize:18,
         top:10,
-        fontWeight:"bold"
+        fontWeight:"bold",
     },
     message:{
+        flexDirection:'row',
         top:80,
         width:200,
         alignSelf:"center",
     },
-    messageTxt:{
+    messageText:{
+        fontSize:18,
+        top:8,
+        fontFamily:"serif",
+        fontWeight:'bold',
+        color:"#214358",   
     },
     bookBtn:{
         alignSelf:'center',

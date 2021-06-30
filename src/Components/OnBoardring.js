@@ -10,17 +10,16 @@ const OnBoarding = ({navigation})=> {
       scrollEnabled={true} 
       autoplay={true} 
       autoplayTimeout={2}
-      //showsButtons={true}
-      dotColor={"#2596be"}
-      activeDotColor={"#fbe3c4"}
+      dotColor={"#AEB8C4"}
+      activeDotColor={"#2596be"}
       >
       <SliderPage1 titl={"Register"}
-       message={"First you need to sign up "}
+       message={"Sign up"}
        nav={navigation}
       
        />
       <SliderPage1 titl={"Login"}
-       message={"Already have account!! \n \n \n       ==== Login ===="}
+       message={"If you already have account sign in"}
        nav={navigation}
        />
      <SliderPage2  nav={navigation}/>

@@ -4,12 +4,13 @@ import { Picker } from '@react-native-picker/picker';
 import { connect, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { getStation } from '../Algorithm/BookingAlgo'
-import { getLines } from './../Redux/actions/Lines';
+import { getLines,clearLines } from './../Redux/actions/Lines';
 import { addTrip } from './../Redux/actions/tripActions';
 import { PacmanIndicator } from 'react-native-indicators';
 import { Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { SCLAlert, SCLAlertButton } from 'react-native-scl-alert'
+import { useFocusEffect } from '@react-navigation/native';
+
 
 const Booking = (props) => {
   
@@ -42,10 +43,16 @@ const Booking = (props) => {
   }
 
     
-  useEffect(() => {
+  useFocusEffect(
+   React.useCallback(() => {
     props.getLines();
-    console.log("Ana hena ya John")
-  }, [])
+    return ()=>{
+        setFrom(null)
+        setTo(null)
+        setToLine(null)
+        setFrom(null)
+    }
+  }, []))
 
 
   if(lines && Flag == 0){
@@ -66,9 +73,9 @@ const Booking = (props) => {
           <View style={{backgroundColor:'#145DA0' , width:'100%' , height:130}}></View>
           <Image style={{marginBottom:15,marginTop:-70, alignSelf:'center', width:'35%',height:140}} source={require('../../assets/metro.png')} ></Image>
           </View>
-    {/* <View style={{marginTop:-50,marginBottom:20,backgroundColor:'#01949A'}}><Icon style={{alignSelf:'center'}} color="#E5DDC8" size={150} name="train-outline"></Icon></View> */}
        <View style={{ alignSelf:'center', width:'75%'}}>
         <Picker dropdownIconColor='#00b300'
+        selectedValue={"Select line"}
           onValueChange={(value) => {
             setFlag(1)
          
@@ -89,6 +96,7 @@ const Booking = (props) => {
         </Picker>
 
         <Picker dropdownIconColor='#00b300'
+        selectedValue={'Select station'}
           onValueChange={(value) => {
             setFrom(value.ID);
           }}>
@@ -100,6 +108,8 @@ const Booking = (props) => {
         </Picker>
 
         <Picker dropdownIconColor='#ff0000'
+        selectedValue={"Select line"}
+        
           onValueChange={(value) => {
             setFlag(1)
             setToLine(value.Number);
@@ -119,6 +129,7 @@ const Booking = (props) => {
         </Picker>
 
         <Picker dropdownIconColor='#ff0000'
+        selectedValue={'Select station'}
           onValueChange={(value) => {
             setTo(value.ID);
           }}
@@ -212,11 +223,10 @@ const styles = StyleSheet.create
   });
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ getLines, addTrip }, dispatch)
+  return bindActionCreators({ getLines, addTrip,clearLines }, dispatch)
 }
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     lines: state.LineReducer.Lines,
     currentuser:state.UserReducer.currentUser

@@ -5,7 +5,9 @@ import { connect } from 'react-redux';
 import { SCLAlert, SCLAlertButton } from 'react-native-scl-alert'
 import { bindActionCreators } from 'redux';
 import { updateTrip } from '../Redux/actions/tripActions'
+import {clearLines} from '../Redux/actions/Lines';
 import { Button } from 'react-native-elements';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const PayPage = (props) => {
   const [Show, setShow] = useState(false);
@@ -18,17 +20,9 @@ const PayPage = (props) => {
     setShow(true);
   }
  
-  const handleClose = () => {
-    setTimeout(() => {
-      setShow(false);
-    }, 500);
-    setTimeout(()=>{
-      nav.navigate("TripsHistory")
-    },1000)
-    
-  }
   const handleClose2 = () => {
-    nav.navigate("Home")
+    props.clearLines();
+    nav.navigate("Booking")
     setShow(false);
   }
 
@@ -53,8 +47,7 @@ const PayPage = (props) => {
         setKey((res as { clientSecret: string }).clientSecret);
       })
       .catch(e => Alert.alert(e.message));
-
-    return () => { console.log("Out") }
+        return ()=>{}
   }, []);
 
   const handleConfirmation = async () => {
@@ -69,7 +62,7 @@ const PayPage = (props) => {
 
       if (!error) {
         const { trip } = props;
-        let obj = { price: trip.tripPrice, payStatus: "Paid" }
+        let obj = { payStatus: "Paid" }
         let id = trip.trip.tripID
         props.updateTrip(obj, id)
         setSsms(`Total fees ${paymentIntent?.amount / 200} EGP`);
@@ -83,6 +76,7 @@ const PayPage = (props) => {
   };
 
   return (
+    <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
     <View>
       <SCLAlert
         theme="success"
@@ -91,7 +85,7 @@ const PayPage = (props) => {
         titleStyle={{ color: 'green' }}
         cancellable={false}
         subtitle={Ssms}
-        onRequestClose={handleClose}
+        onRequestClose={handleClose2}
         >
         <SCLAlertButton theme="inverse" onPress={handleClose2}>Done</SCLAlertButton>
       </SCLAlert>
@@ -109,9 +103,6 @@ const PayPage = (props) => {
 
       <CardField
         postalCodeEnabled={false}
-        // placeholder={{
-        //   number: '4242 4242 4242 4242',
-        // }}
         cardStyle={styles.cardStyle}
         style={styles.cStyle}
       />
@@ -119,6 +110,7 @@ const PayPage = (props) => {
         <Button buttonStyle={styles.Pay} title="Confirm payment" onPress={handleConfirmation} />
       </View>
     </View>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -150,7 +142,7 @@ const styles = StyleSheet.create
     }
   })
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ updateTrip }, dispatch)
+  return bindActionCreators({ updateTrip,clearLines }, dispatch)
 }
 
 const mapStateToProps = (state) => {

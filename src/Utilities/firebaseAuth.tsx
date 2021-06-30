@@ -7,12 +7,16 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 export default class FirebaseUtilities {
 
   public static signIn = (email, password) => {
-  
-
-    
     return auth().signInWithEmailAndPassword(email, password);
-  
+    
   };
+
+  public static  checkEmailIsExist = (email) => {
+    return  auth().fetchSignInMethodsForEmail(email);
+  
+    
+  };
+
   
   public static signUp = (email, password) => {
 
@@ -43,7 +47,6 @@ export default class FirebaseUtilities {
     return auth().signInWithCredential(facebookCredential);
   }
   public static  signInWithGoogle = async ()=>{
-    console.log('pressed');
     GoogleSignin.configure({
       webClientId: '',
     });

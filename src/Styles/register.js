@@ -2,39 +2,44 @@ import {StyleSheet} from 'react-native';
 
 const registerStyle = StyleSheet.create({
   container: {
-    backgroundColor: '#fbe3c4',
+    backgroundColor: '#E3E8E9',
     alignSelf: 'stretch',
     margin: 20,
     borderRadius: 25,
-    marginTop: '5%',
+    marginTop: '3%',
   },
   iconStyle: {
     color: '#2596be',
     paddingHorizontal: 10,
     fontSize: 20,
   },
-  inputStyle: {
-    marginBottom: 20,
-  },
   genderContainer: {
     flexDirection: 'row',
+    alignSelf:'center',
     alignItems: 'center',
-    marginVertical: 25,
+    marginBottom:10,
+    marginTop:0
   },
   submitBtn: {
     backgroundColor: '#2596be',
-    width: 100,
+    width: 150,
     height: 50,
-    textAlign: 'center',
     borderRadius: 25,
-    marginHorizontal: '35%',
     marginBottom: 20,
+    alignSelf:'center'
+  },
+  Pay:
+  {
+    backgroundColor: '#0074B7',
+    alignSelf: 'center',
+    width:'50%',
+    height:50,
+    borderRadius:50,
   },
   textBtn: {
     color: '#fff',
     fontSize: 15,
-    textAlign: 'center',
-    marginVertical: 10,
+    textAlign:'center',
     fontWeight: 'bold',
   },
 });

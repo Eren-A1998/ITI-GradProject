@@ -9,8 +9,11 @@ const CarouselCards = () => {
     const isCarousel = React.useRef(null)
   
     return (
-      <View style={{height:300,backgroundColor:'#eaf0ff'}}>
-        <Carousel  
+      <View style={{height:300,backgroundColor:'#E3E8E9'}}>
+        <Carousel
+          autoplay={true}
+          autoplayDelay={1}
+          loop={true}
           layout={'default'}
           layoutCardOffset={9}
           ref={isCarousel}
@@ -32,10 +35,8 @@ const CarouselCards = () => {
           borderRadius: 10,
           marginHorizontal: 0,
           marginBottom:20,
-          backgroundColor: '#ff7800'
+          backgroundColor: '#2596be',
         }}
-        inactiveDotOpacity={0.4}
-        inactiveDotScale={0.6}
         tappableDots={true}
       />
       </View>
